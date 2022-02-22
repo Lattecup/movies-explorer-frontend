@@ -1,0 +1,124 @@
+.menu-mobile {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s linear, opacity 0.2s linear;
+  position: fixed;
+  background-color: #FAFAFA;
+  width: 520px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.menu-mobile_opened {
+  visibility: visible;
+  opacity: 1;
+}
+
+.menu-mobile__open-button {
+  display: none;
+  background-color: transparent;
+  background-image: url(../../images/menu-mobile-image.svg);
+  border: none;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+}
+
+.menu-mobile__navigation {
+  height: calc(100vh - 270px);
+  padding: 159px 0 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-mobile__links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.menu-mobile__link {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.22;
+  text-align: center;
+  color: #000000;
+}
+
+.menu-mobile__link_active {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.22;
+  text-align: center;
+  color: #000000;
+  border-bottom: 2px solid #000000;
+}
+
+.menu-mobile__account {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+.menu-mobile__account-link {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.14;
+  color: #000000;
+}
+
+.menu-mobile__account-image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 30px;
+  background-color: #F4F4F4;
+  border-radius: 4px;
+}
+
+.menu-mobile__account-image {
+  width: 11.5px;
+  height: 14px;
+  background-color: #F4F4F4;
+  border-radius: 4px;
+}
+
+.menu-mobile__close-button {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  padding: 0;
+  background-image: url(../../images/menu-mobile-close-button.svg);
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1023px) {
+  .menu-mobile__open-button {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .menu-mobile {
+    width: 100%;
+  }
+  .menu-mobile__open-button {
+    width: 40px;
+    height: 43px;
+  }
+  .menu-mobile__navigation {
+    padding: 144px 0 48px;
+  }
+}
+

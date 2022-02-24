@@ -68,13 +68,11 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/signup" element={<Register onRegistration={handleRegistration}/>} />
           <Route path="/signin" element={<Login onAuthorization={handleAuthorization}  onSignOut={handleSignOut} />} />
-          <Route element={
-            <ProtectedRoute loggedIn={loggedIn}>
-              <Route path="/movies" element={<Movies />} />
-              <Route path="/saved-movies" element={<SavedMovies />} />
-              <Route path="/profile" element={<Profile />} />
-            </ProtectedRoute>
-          } />
+          <Route element={<ProtectedRoute loggedIn={loggedIn} />} >
+            <Route path="/movies" element={<Movies />} />
+            <Route path="/saved-movies" element={<SavedMovies />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

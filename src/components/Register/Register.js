@@ -53,7 +53,7 @@ function Register(props) {
         <Form type="password" name="password" id="password-input" placeholder="Пароль" minLength="6" value={password} error={errorPassword} isValid={isValid} onChange={handleChangePassword} />
         <FormButton title="Зарегистрироваться" type="form__submit-button_type_register" isValid={isValid} />
       </form>
-      <FormBottom text="Уже зарегистрированы?" link="/signin" linkText="Войти" isSuccess={props.isSuccess ? `${props.successMessage}` : `${props.errorMessage}`}/>
+      <FormBottom text="Уже зарегистрированы?" link="/signin" linkText="Войти" />
     </section>
   );
 };

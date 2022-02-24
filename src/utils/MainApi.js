@@ -12,37 +12,20 @@ class MainApi {
     return Promise.reject(`Ошибка: ${res.status}`);
   };
 
-  register(name, email, password) {
-    return fetch(`${this._url}/signup`, {
-      credentials: 'include',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, password })
-    })
-    .then(this._handleResponse);
-  };
-
-  authorize(email, password) {
-    return fetch(`${this._url}/signin`, {
-      credentials: 'include',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password })
-    })
-    .then(this._handleResponse);
-  };
-
-  checkToken = () => {
-    return fetch(`${this._url}/users/me`, {
+  getUserInfo() {
+    return fetch(this._url + '/users/me', {
       credentials: 'include',
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this._headers,
+    })
+    .then(this._handleResponse);
+  };
+
+  getMovies() {
+    return fetch(this._url + '/movies', {
+      credentials: 'include',
+      method: 'GET',
+      headers: this._headers, 
     })
     .then(this._handleResponse);
   };

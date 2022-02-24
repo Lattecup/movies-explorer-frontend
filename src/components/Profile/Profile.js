@@ -27,7 +27,7 @@ function Profile(props) {
         </div>
         <div className="profile__buttons">
           <button type="submit" className="profile__button profile__button_type_submit link">Редактировать</button>
-          <button type="button" className="profile__button profile__button_type_logout link" aria-label="Выйти из аккаунта">Выйти из аккаунта</button>
+          <button type="button" className="profile__button profile__button_type_logout link" aria-label="Выйти из аккаунта" onClick={props.onSignOut}>Выйти из аккаунта</button>
         </div>
       </section>
     </>

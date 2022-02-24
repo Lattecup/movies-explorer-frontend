@@ -9,7 +9,7 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import { mainApi } from '../../utils/MainApi';
+import * as auth from '../../utils/AuthApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function App() {
@@ -17,30 +17,20 @@ function App() {
 
   const [currentUser, setCurrentUser] = React.useState({});
 
-  const [isSuccess, setIsSuccess] = React.useState(false);
-  const [successMessage, setSuccessMessage] = React.useState('');
-  const [errorMessage, setErrorMessage] = React.useState('');
-
   const [loggedIn, setLoggedIn] = React.useState(false);
 
   function handleRegistration(name, email, password) {
-    mainApi.register(name, email, password)
+    auth.register(name, email, password)
     .then(() => {
-      setIsSuccess(true);
-      setSuccessMessage('Вы успешно зарегистрированы!')
-      navigate('/movies');
+      handleAuthorization(email, password);
     })
     .catch((err) => {
       console.log(err);
-      setIsSuccess(false);
-    })
-    .finally(() => {
-      setErrorMessage('Что-то пошло не так...');
     });
   };
 
   function handleAuthorization(email, password) {
-    mainApi.authorize(email, password)
+    auth.authorize(email, password)
     .then((res) => {
       localStorage.setItem('jwt', res.token);
       setLoggedIn(true);
@@ -54,7 +44,7 @@ function App() {
   React.useEffect(() => {
     const token = localStorage.getItem('jwt');
     if (token) {
-      mainApi.checkToken()
+      auth.checkToken()
       .then((res) => {
         setLoggedIn(true);
         navigate('/movies');
@@ -65,26 +55,24 @@ function App() {
     };
   }, [navigate]);
 
+  function handleSignOut() {
+    localStorage.removeItem('jwt');
+    navigate('/signin');
+    setLoggedIn(false);
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/signup" element={<Register isSuccess={isSuccess} successMessage={successMessage} errorMessage={errorMessage} onRegistration={handleRegistration}/>} />
-          <Route path="/signin" element={<Login onAuthorization={handleAuthorization} />} />
-          <Route path="/movies" element={
+          <Route path="/signup" element={<Register onRegistration={handleRegistration}/>} />
+          <Route path="/signin" element={<Login onAuthorization={handleAuthorization}  onSignOut={handleSignOut} />} />
+          <Route element={
             <ProtectedRoute loggedIn={loggedIn}>
-              <Movies loggedIn={loggedIn}/>
-            </ProtectedRoute>
-          } />
-          <Route path="/saved-movies" element={
-            <ProtectedRoute loggedIn={loggedIn}>
-              <SavedMovies loggedIn={loggedIn}/>
-            </ProtectedRoute>
-          } />
-          <Route path="/profile" element={
-            <ProtectedRoute loggedIn={loggedIn}>
-              <Profile loggedIn={loggedIn}/>
+              <Route path="/movies" element={<Movies />} />
+              <Route path="/saved-movies" element={<SavedMovies />} />
+              <Route path="/profile" element={<Profile />} />
             </ProtectedRoute>
           } />
           <Route path="*" element={<NotFoundPage />} />

@@ -5,7 +5,7 @@ import FormTop from '../FormTop/FormTop';
 import FormBottom from '../FormBottom/FormBottom';
 import FormButton from '../FormButton/FormButton';
 
-function Register() {
+function Register(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -27,6 +27,7 @@ function Register() {
 
   function handleSubmit(evt) {
     evt.preventDefault();
+    props.onAuthorization(email, password);
   };
 
   React.useEffect(() => {

@@ -5,7 +5,7 @@ import FormTop from '../FormTop/FormTop';
 import FormBottom from '../FormBottom/FormBottom';
 import FormButton from '../FormButton/FormButton';
 
-function Register() {
+function Register(props) {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -35,6 +35,7 @@ function Register() {
 
   function handleSubmit(evt) {
     evt.preventDefault();
+    props.onRegistration(name, email, password);
   };
 
   React.useEffect(() => {
@@ -52,7 +53,7 @@ function Register() {
         <Form type="password" name="password" id="password-input" placeholder="Пароль" minLength="6" value={password} error={errorPassword} isValid={isValid} onChange={handleChangePassword} />
         <FormButton title="Зарегистрироваться" type="form__submit-button_type_register" isValid={isValid} />
       </form>
-      <FormBottom text="Уже зарегистрированы?" link="/signin" linkText="Войти"/>
+      <FormBottom text="Уже зарегистрированы?" link="/signin" linkText="Войти" isSuccess={props.isSuccess ? `${props.successMessage}` : `${props.errorMessage}`}/>
     </section>
   );
 };

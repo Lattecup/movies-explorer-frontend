@@ -72,7 +72,7 @@ function App() {
           <Route path="/movies" element={<Movies loggedIn={loggedIn} />} />
           <Route path="/saved-movies" element={<SavedMovies loggedIn={loggedIn}/>} />
           <Route path="/profile" element={<Profile loggedIn={loggedIn} />} />
-          <Route path="/signup" element={<Register isSuccess={isSuccess} successMessage={successMessage} errorMessage={errorMessage} onRegistartion={handleRegistration}/>} />
+          <Route path="/signup" element={<Register isSuccess={isSuccess} successMessage={successMessage} errorMessage={errorMessage} onRegistration={handleRegistration}/>} />
           <Route path="/signin" element={<Login onAuthorization={handleAuthorization} />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

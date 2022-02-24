@@ -8,6 +8,7 @@ import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { mainApi } from '../../utils/MainApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
@@ -69,11 +70,23 @@ function App() {
       <div className="page">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/movies" element={<Movies loggedIn={loggedIn} />} />
-          <Route path="/saved-movies" element={<SavedMovies loggedIn={loggedIn}/>} />
-          <Route path="/profile" element={<Profile loggedIn={loggedIn} />} />
           <Route path="/signup" element={<Register isSuccess={isSuccess} successMessage={successMessage} errorMessage={errorMessage} onRegistration={handleRegistration}/>} />
           <Route path="/signin" element={<Login onAuthorization={handleAuthorization} />} />
+          <Route path="/movies" element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <Movies />
+            </ProtectedRoute>
+          } />
+          <Route path="/saved-movies" element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <SavedMovies />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <Profile />
+            </ProtectedRoute>
+          } />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

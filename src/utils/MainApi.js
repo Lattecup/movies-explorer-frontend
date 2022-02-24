@@ -12,33 +12,26 @@ class MainApi {
     return Promise.reject(`Ошибка: ${res.status}`);
   };
 
-  register(data) {
+  register(name, email, password) {
     return fetch(`${this._url}/signup`, {
       credentials: 'include',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 
-        name: data.name,
-        email: data.email, 
-        password: data.password
-      })
+      body: JSON.stringify({ name, email, password })
     })
     .then(this._handleResponse);
   };
 
-  authorize(data) {
+  authorize(email, password) {
     return fetch(`${this._url}/signin`, {
       credentials: 'include',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 
-        email: data.email,
-        password: data.password
-      })
+      body: JSON.stringify({ email, password })
     })
     .then(this._handleResponse);
   };

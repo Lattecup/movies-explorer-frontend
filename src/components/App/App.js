@@ -22,8 +22,8 @@ function App() {
 
   const [loggedIn, setLoggedIn] = React.useState(true);
 
-  function handleRegistration(data) {
-    mainApi.register(data)
+  function handleRegistration(name, email, password) {
+    mainApi.register(name, email, password)
     .then(() => {
       setIsSuccess(true);
       setSuccessMessage('Вы успешно зарегистрированы!')
@@ -38,8 +38,8 @@ function App() {
     });
   };
 
-  function handleAuthorization(data) {
-    mainApi.authorize(data)
+  function handleAuthorization(email, password) {
+    mainApi.authorize(email, password)
     .then((res) => {
       localStorage.setItem('jwt', res.token);
       setLoggedIn(true);

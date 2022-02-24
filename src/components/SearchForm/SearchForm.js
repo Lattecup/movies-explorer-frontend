@@ -12,7 +12,7 @@ function SearchForm() {
     <form className="search-form" onSubmit={handleSubmit}>
       <div className="search-form__input-container">
         <div className="search-form__input-icon" />
-        <input type="text" className="search-form__input" placeholder="Фильм" name="search" id="search-input"/>
+        <input type="text" className="search-form__input" placeholder="Фильм" name="search" id="search-input" required />
         <button type="submit" className="search-form__submit-button link" />
       </div>
       <div className="search-form__checkbox-container">

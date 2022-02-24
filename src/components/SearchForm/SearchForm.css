@@ -24,6 +24,7 @@
   width: 100%;
   border: none;
   padding: 0;
+  margin-right: 4px;
   background-color: #FAFAFA;
   font-weight: 500;
   font-size: 28px;
@@ -37,6 +38,8 @@
 
 .search-form__input:focus {
   outline: none;
+  border: 1px solid #3456F3;
+  border-radius: 3px;
 }
 
 .search-form__submit-button {

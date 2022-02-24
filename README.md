@@ -1,2 +1,1 @@
-# movies-explorer-frontend
-Frontend
+https://movies-explorer.nomoredomains.xyz/

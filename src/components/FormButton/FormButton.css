@@ -1,0 +1,39 @@
+.form__submit-button {
+  width: 100%;
+  height: 45px;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  background-color: #3456F3;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.21;
+  color: #FFFFFF;
+}
+
+.form__submit-button_disabled {
+  background-color: #F4F4F4;
+  color: #A0A0A0;
+}
+
+.form__submit-button_type_login {
+  margin-top: 179px;
+}
+
+.form__submit-button_type_register {
+  margin-top: 70px;
+}
+
+@media screen and (max-width: 767px) {
+  .form__submit-button {
+    font-size: 12px;
+    line-height: 1.25;
+  }
+  .form__submit-button_type_login {
+    margin-top: 267px;
+  }
+  .form__submit-button_type_register {
+    margin-top: 157px;
+  }
+}

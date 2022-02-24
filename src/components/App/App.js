@@ -19,18 +19,18 @@ function App() {
 
   const [loggedIn, setLoggedIn] = React.useState(false);
 
-  function handleRegistration(name, email, password) {
-    auth.register(name, email, password)
+  function handleRegistration(data) {
+    auth.register(data)
     .then(() => {
-      handleAuthorization(email, password);
+      handleAuthorization(data);
     })
     .catch((err) => {
       console.log(err);
     });
   };
 
-  function handleAuthorization(email, password) {
-    auth.authorize(email, password)
+  function handleAuthorization(data) {
+    auth.authorize(data)
     .then((res) => {
       localStorage.setItem('jwt', res.token);
       setLoggedIn(true);

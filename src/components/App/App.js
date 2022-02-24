@@ -74,17 +74,17 @@ function App() {
           <Route path="/signin" element={<Login onAuthorization={handleAuthorization} />} />
           <Route path="/movies" element={
             <ProtectedRoute loggedIn={loggedIn}>
-              <Movies />
+              <Movies loggedIn={loggedIn}/>
             </ProtectedRoute>
           } />
           <Route path="/saved-movies" element={
             <ProtectedRoute loggedIn={loggedIn}>
-              <SavedMovies />
+              <SavedMovies loggedIn={loggedIn}/>
             </ProtectedRoute>
           } />
           <Route path="/profile" element={
             <ProtectedRoute loggedIn={loggedIn}>
-              <Profile />
+              <Profile loggedIn={loggedIn}/>
             </ProtectedRoute>
           } />
           <Route path="*" element={<NotFoundPage />} />

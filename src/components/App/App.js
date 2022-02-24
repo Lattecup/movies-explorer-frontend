@@ -21,7 +21,7 @@ function App() {
   const [successMessage, setSuccessMessage] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
 
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   function handleRegistration(name, email, password) {
     mainApi.register(name, email, password)

@@ -57,7 +57,7 @@ class MainApi {
 };
 
 export const mainApi = new MainApi({
-  url: 'https://movies-explorer.nomoredomains.xyz',
+  url: 'https://api.movies-explorer.nomoredomains.xyz',
   credentials: 'include',
   headers: {
     'Content-Type': 'application/json',

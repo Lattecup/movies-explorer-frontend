@@ -48,34 +48,33 @@ function App() {
      })
   };
 
-  function checkToken() {
+  React.useEffect(() => {
     const token = localStorage.getItem('jwt');
     if (token) {
       auth.checkToken()
-        .then(() => {
+        .then((res) => {
+          setCurrentUser(res);
           setLoggedIn(true);
+          navigate('/movies');
           })
           .catch((err) => {
             console.log(err);
-          })
+          });
     };
-  };
+  }, [navigate]);
+
 
   React.useEffect(() => {
-    checkToken();
-  }, [loggedIn]);
-
-  React.useEffect(() => {
-    if (loggedIn) {
-      mainApi.getUserInfo()
-        .then(() => {
-          setLoggedIn(true);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [loggedIn]);
+    mainApi.getUserInfo()
+      .then((res) => {
+        setCurrentUser(res);
+        console.log(currentUser);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  
 
   function handleSignOut() {
     localStorage.removeItem('jwt');

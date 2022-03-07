@@ -16,9 +16,7 @@ function Movies(props) {
         {props.isLoading && <Preloader />}
         <MoviesCardList
           movies={props.movies}
-          moviesMessage={props.moviesMessage}
           isLoading={props.isLoading}
-          handleSaveMovie={props.handleSaveMovie}
         />
       </section>
       <Footer />

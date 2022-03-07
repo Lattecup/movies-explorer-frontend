@@ -23,6 +23,8 @@ function App() {
 
   const [movies, setMovies] = React.useState([]);
 
+  const [isLoading, setIsLoading] = React.useState(false);
+
   function handleRegistration(name, email, password) {
     auth.register(name, email, password)
       .then(() => {

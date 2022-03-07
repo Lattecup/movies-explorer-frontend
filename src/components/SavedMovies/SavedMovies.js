@@ -15,9 +15,8 @@ function SavedMovies(props) {
         <SearchForm handleSearch={props.handleSearch} />
         {props.isLoading && <Preloader />}
         <MoviesCardList
-          movies={props.savedMovies}
+          movies={props.movies}
           isLoading={props.isLoading}
-          moviesMessage={props.moviesMessage}
         />
       </section>
       <Footer />

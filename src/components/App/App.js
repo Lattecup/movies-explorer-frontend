@@ -22,30 +22,60 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(true);
 
   const [movies, setMovies] = React.useState([]);
+  const [savedMovies, setSavedMovies] = React.useState([]);
 
   const [isLoading, setIsLoading] = React.useState(false);
 
+  function setAllData() {
+    Promise.all([mainApi.getUserInfo(), moviesApi.getMovies(), mainApi.getMovies()])
+      .then(([userInfo, initialMovies, savedMovies]) => {
+        setCurrentUser(userInfo);
+        setMovies(initialMovies);
+        setSavedMovies(savedMovies);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   function handleRegistration(name, email, password) {
     auth.register(name, email, password)
-      .then(() => {
-        navigate('/movies');
+      .then((res) => {
+        if (res) {
+          handleAuthorization(email, password);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  function handleAuthorization(email, password) {
+    auth.authorize(email, password)
+      .then((res) => {
+        if (res) {
+          localStorage.setItem('jwt', res.token);
+          setLoggedIn(true);
+          setAllData();
+          navigate('/movies');
+        }
       })
       .catch((err) => {
         console.log(err);
       })
   };
 
-  function handleAuthorization(email, password) {
-    auth.authorize(email, password)
-     .then((res) => {
-       localStorage.setItem('jwt', res.token);
-       setLoggedIn(true);
-       navigate('/movies');
-       getUserInfo();
-     })
-     .catch((err) => {
-       console.log(err);
-     })
+  function getUserInfo() {
+    const token = localStorage.getItem('jwt');
+    mainApi.getUserInfo(token)
+      .then((data) => {
+        if (data) {
+          setCurrentUser(data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   React.useEffect(() => {
@@ -53,43 +83,23 @@ function App() {
     if (token) {
       auth.checkToken()
         .then((res) => {
-          getUserInfo(res);
-          setLoggedIn(true);
-          navigate('/movies');
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-    };
-  }, [navigate]);
+          if (res) {
+            setLoggedIn(true);
+            setAllData();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+  }, []);
 
-
-  function getUserInfo() {
-    mainApi.getUserInfo()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  
 
   function handleSignOut() {
     localStorage.removeItem('jwt');
     navigate('/');
     setLoggedIn(false);
   }
-
-  React.useEffect(() => {
-    moviesApi.getMovies()
-      .then((movies) => {
-        setMovies(movies);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

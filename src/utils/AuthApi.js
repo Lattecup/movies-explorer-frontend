@@ -32,7 +32,7 @@ export const authorize = (email, password) => {
   .then(handleResponse);
 };
 
-export const checkToken = () => {
+export const checkToken = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
     credentials: 'include',
     method: 'GET',

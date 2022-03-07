@@ -12,7 +12,7 @@ class MainApi {
     return Promise.reject(`Ошибка: ${res.status}`);
   };
 
-  getUserInfo() {
+  getUserInfo(token) {
     return fetch(this._url + '/users/me', {
       credentials: 'include',
       method: 'GET',
@@ -34,7 +34,7 @@ class MainApi {
     .then(this._handleResponse);
   };
 
-  getMovies() {
+  getMovies(token) {
     return fetch(this._url + '/movies', {
       credentials: 'include',
       method: 'GET',
@@ -54,7 +54,7 @@ class MainApi {
         duration: movie.director,
         year: movie.year,
         description: movie.description,
-        image: movie.image,
+        image: movie.image.url,
         trailerLink: movie.trailerLink,
         thumbnail: movie.thumbnail,
         movieId: movie.movieId,

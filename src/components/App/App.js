@@ -30,7 +30,6 @@ function App() {
 
   const [isLoading, setIsLoading] = React.useState(false);
 
-
   function handleRegistration(name, email, password) {
     auth.register(name, email, password)
     .then(() => {
@@ -47,6 +46,7 @@ function App() {
       localStorage.setItem('jwt', res.token);
       setLoggedIn(true);
       navigate('/movies');
+      getAllData();
     })
     .catch((err) => {
       console.log(err);
@@ -117,7 +117,7 @@ function App() {
     }
   }; 
 
-  React.useEffect(() => {
+  function getAllData() {
     Promise.all([mainApi.getUserInfo(), mainApi.getMovies()])
       .then(([userInfo, moviesData]) => {
         setCurrentUser(userInfo);
@@ -131,7 +131,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
-  });
+  };
 
 
   return (
@@ -139,10 +139,11 @@ function App() {
       <div className="page">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/signup" element={<Register onRegistration={handleRegistration}/>} />
+          <Route path="/signup" element={<Register onRegistration={handleRegistration} />} />
           <Route path="/signin" element={<Login onAuthorization={handleAuthorization}  onSignOut={handleSignOut} />} />
           <Route path="/movies" element={
-            <Movies 
+            <Movies
+              loggedIn={loggedIn} 
               movies={movies} 
               moviesMessage={moviesMessage}
               isLoading={isLoading} 
@@ -150,14 +151,15 @@ function App() {
             />} 
           />
           <Route path="/saved-movies" element={
-            <SavedMovies 
+            <SavedMovies
+              loggedIn={loggedIn}  
               savedMovies={savedMovies}
               moviesMessage={moviesMessage}
               isLoading={isLoading}
               handleSearch={handleSearch}
             />} 
           />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile loggedIn={loggedIn} />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

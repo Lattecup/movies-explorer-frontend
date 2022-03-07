@@ -92,7 +92,7 @@ function App() {
           <Route path="/signup" element={<Register onRegistration={handleRegistration} />} />
           <Route path="/signin" element={<Login onAuthorization={handleAuthorization} />} />
           <Route path="/" element={<Main />} />
-          <Route path="/movies" element={<Movies loggedIn={loggedIn} />} />
+          <Route path="/movies" element={<Movies loggedIn={loggedIn} movies={movies} />} />
           <Route path="/saved-movies" element={<SavedMovies loggedIn={loggedIn}/>} />
           <Route path="/profile" element={<Profile loggedIn={loggedIn} />} />
           <Route path="*" element={<NotFoundPage />} />

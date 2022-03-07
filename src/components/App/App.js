@@ -42,6 +42,7 @@ function App() {
        localStorage.setItem('jwt', res.token);
        setLoggedIn(true);
        navigate('/movies');
+       getUserInfo();
      })
      .catch((err) => {
        console.log(err);
@@ -64,7 +65,7 @@ function App() {
   }, [navigate]);
 
 
-  React.useEffect(() => {
+  function getUserInfo() {
     mainApi.getUserInfo()
       .then((res) => {
         setCurrentUser(res);
@@ -73,7 +74,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  });
+  };
   
 
   function handleSignOut() {

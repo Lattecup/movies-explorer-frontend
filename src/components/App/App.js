@@ -68,14 +68,26 @@ function App() {
 
   React.useEffect(() => {
     if (loggedIn) {
+      mainApi.getUserInfo(localStorage.token)
+        .then(() => {
+          setLoggedIn(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [loggedIn]);
+
+  React.useEffect(() => {
+    if (loggedIn) {
       mainApi.getUserInfo()
         .then((data) => {
           setCurrentUser(data);
         })
         .catch((err) => {
           console.log(err);
-        });
-    }
+        })
+    };
   }, [loggedIn]);
 
   function handleSignOut() {

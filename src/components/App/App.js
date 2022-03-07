@@ -53,6 +53,7 @@ function App() {
     if (token) {
       auth.checkToken()
         .then((res) => {
+          setCurrentUser(res);
           setLoggedIn(true);
           })
           .catch((err) => {

@@ -19,6 +19,7 @@ function MoviesCard(props) {
     setIsSaved(false);
   };
 
+  /*
   function handleSaveClick() {
     props.handleSaveMovie(props.movie);
   };
@@ -26,6 +27,7 @@ function MoviesCard(props) {
   function handleDeleteClick() {
     props.handleDeleteMovie(props.movie);
   };
+  */
 
   return (
     <div className="movie" onMouseOver={handleSaveMovieButtonActive} onMouseOut={handleSaveMovieButtonInactive}>
@@ -35,9 +37,9 @@ function MoviesCard(props) {
           <p className="movie__duration">{duration}</p>
         </div>
         {location.pathname === '/saved-movies' ? (
-          <button className="movie__button movie__button_type_delete link" type="button" onClick={handleDeleteClick}/>
+          <button className="movie__button movie__button_type_delete link" type="button" />
         ) : (
-          <button className={movieSaveButtonClassName} onClick={handleSaveClick}></button>
+          <button className={movieSaveButtonClassName} />
         )}
       </div>
       <a href={props.movie.trailerLink} alt={props.movie.nameRU} target='_blank' rel="noreferrer">

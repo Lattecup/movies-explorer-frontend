@@ -14,6 +14,7 @@ function SearchForm(props) {
     setChecked(!checked);
   }
 
+/*
   function handleSubmit(evt) {
     evt.preventDefault();
     localStorage.setItem('keyword', keyword);
@@ -28,9 +29,10 @@ function SearchForm(props) {
   React.useEffect(() => {
     props.handleSearch(checked);
   }, [checked]);
+  */
 
   return (
-    <form className="search-form" onSubmit={handleSubmit}>
+    <form className="search-form">
       <div className="search-form__input-container">
         <div className="search-form__input-icon" />
         <input type="text" className="search-form__input" placeholder="Фильм" name="search" id="search" minLength="2" maxLength="30" required onChange={handleKeyword} value={keyword || ''} />

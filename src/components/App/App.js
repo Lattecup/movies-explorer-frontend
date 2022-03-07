@@ -28,7 +28,6 @@ function App() {
   function handleRegistration(name, email, password) {
     auth.register(name, email, password)
       .then(() => {
-        handleAuthorization(email, password);
         navigate('/movies');
       })
       .catch((err) => {
@@ -54,7 +53,7 @@ function App() {
     if (token) {
       auth.checkToken()
         .then((res) => {
-          setCurrentUser(res);
+          getUserInfo(res);
           setLoggedIn(true);
           navigate('/movies');
           })
@@ -67,9 +66,8 @@ function App() {
 
   function getUserInfo() {
     mainApi.getUserInfo()
-      .then((res) => {
-        setCurrentUser(res);
-        console.log(currentUser);
+      .then((data) => {
+        setCurrentUser(data);
       })
       .catch((err) => {
         console.log(err);

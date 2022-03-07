@@ -115,7 +115,17 @@ function App() {
       setSavedMovies([]);
       setMoviesMessage('Нужно ввести ключевое слово')
     }
-  }; 
+  };
+  
+  function handleSaveMovie(movie) {
+    mainApi.saveMovie(movie)
+      .then((newSavedMovie) => {
+        setSavedMovies([newSavedMovie, ...savedMovies]);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
 
   function getAllData() {
     Promise.all([mainApi.getUserInfo(), mainApi.getMovies()])
@@ -148,6 +158,7 @@ function App() {
               moviesMessage={moviesMessage}
               isLoading={isLoading} 
               handleSearch={handleSearch}
+              handleSaveMovie={handleSaveMovie}
             />} 
           />
           <Route path="/saved-movies" element={

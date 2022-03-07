@@ -77,6 +77,12 @@ function App() {
     }
   }, [loggedIn]);
 
+  function handleSignOut() {
+    localStorage.removeItem('jwt');
+    navigate('/');
+    setLoggedIn(false);
+  }
+
   React.useEffect(() => {
     moviesApi.getMovies()
       .then((movies) => {
@@ -96,7 +102,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/movies" element={<Movies loggedIn={loggedIn} movies={movies} />} />
           <Route path="/saved-movies" element={<SavedMovies loggedIn={loggedIn} movies={movies} />} />
-          <Route path="/profile" element={<Profile loggedIn={loggedIn} />} />
+          <Route path="/profile" element={<Profile loggedIn={loggedIn} onSignOut={handleSignOut}/>} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
     </div>

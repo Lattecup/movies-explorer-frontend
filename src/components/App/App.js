@@ -21,6 +21,8 @@ function App() {
 
   const [loggedIn, setLoggedIn] = React.useState(true);
 
+  const [movies, setMovies] = React.useState([]);
+
   function handleRegistration(name, email, password) {
     auth.register(name, email, password)
       .then(() => {
@@ -72,6 +74,16 @@ function App() {
         });
     }
   }, [loggedIn]);
+
+  React.useEffect(() => {
+    moviesApi.getMovies()
+      .then((movies) => {
+        setMovies(movies);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  });
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

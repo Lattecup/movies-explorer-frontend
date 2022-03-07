@@ -4,7 +4,7 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import MovieCard from '../MoviesCard/MoviesCard';
+import Preloader from '../Preloader/Preloader';
 
 function SavedMovies(props) {
 
@@ -12,12 +12,13 @@ function SavedMovies(props) {
     <>
       <Header loggedIn={props.loggedIn} />
       <section className="movies">
-        <SearchForm />
-        <MoviesCardList>
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-        </MoviesCardList>
+        <SearchForm handleSearch={props.handleSearch} />
+        {props.isLoading && <Preloader />}
+        <MoviesCardList
+          movies={props.savedMovies}
+          isLoading={props.isLoading}
+          moviesMessage={props.moviesMessage}
+        />
       </section>
       <Footer />
     </>

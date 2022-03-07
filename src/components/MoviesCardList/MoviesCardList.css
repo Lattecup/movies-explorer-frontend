@@ -5,6 +5,16 @@
   align-items: center;
 }
 
+.movies-card-list__span {
+  display: none;
+}
+
+.movies-card-list__span_active {
+  color: #EE3465;
+  text-align: center;
+  margin: 80px auto 0;
+}
+
 .movies-card-list__container {
   margin: 70px 0 80px;
   width: 1140px;

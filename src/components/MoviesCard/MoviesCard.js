@@ -1,34 +1,48 @@
 import React from 'react';
 import './MoviesCard.css';
-import movie from '../../images/movie.png';
 import { useLocation } from 'react-router';
 
 function MoviesCard(props) {
-  const location = useLocation();
+
   const [isSaved, setIsSaved] = React.useState(false);
 
-  function handleSaveMovie() {
-    if (isSaved) {
-      setIsSaved(false);
-    } else {
-      setIsSaved(true);
-    }
+  const location = useLocation();
+  const image = props.movie.image.url ? `https://api.nomoreparties.co${props.movie.image.url}` : props.movie.image;
+  const duration = `${Math.floor(props.movie.duration / 60)}ч ${props.movie.duration % 60}м`;
+  const movieSaveButtonClassName = isSaved ? 'movie__button movie__button_type_saved link' : 'movie__button movie__button_type_save link';
+
+  function handleSaveMovieButtonActive() {
+    setIsSaved(true);
+  };
+
+  function handleSaveMovieButtonInactive() {
+    setIsSaved(false);
+  };
+
+  function handleSaveClick() {
+    props.handleSaveMovie(props.movie);
+  };
+
+  function handleDeleteClick() {
+    props.handleDeleteMovie(props.movie);
   };
 
   return (
-    <div className="movie">
+    <div className="movie" onMouseOver={handleSaveMovieButtonActive} onMouseOut={handleSaveMovieButtonInactive}>
       <div className="movie__container">
         <div className="movie__info">
-          <p className="movie__title">33 слова о дизайне</p>
-          <p className="movie__duration">1ч 47м</p>
+          <p className="movie__title">{props.movie.nameRU}</p>
+          <p className="movie__duration">{duration}</p>
         </div>
         {location.pathname === '/saved-movies' ? (
-          <button className="movie__button movie__button_type_delete link" type="button" />
+          <button className="movie__button movie__button_type_delete link" type="button" onClick={handleDeleteClick}/>
         ) : (
-          <button onClick={handleSaveMovie} className={isSaved ? 'movie__button movie__button_type_saved link' : 'movie__button movie__button_type_save link'}></button>
+          <button className={movieSaveButtonClassName} onClick={handleSaveClick}></button>
         )}
       </div>
-      <img src={movie} className="movie__image" alt="Постер фильма"/>
+      <a href={props.movie.trailerLink} alt={props.movie.nameRU} target='_blank' rel="noreferrer">
+        <img src={image} className="movie__image" alt="Постер фильма"/>
+      </a>
     </div>
   );
 };

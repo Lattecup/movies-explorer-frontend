@@ -117,10 +117,31 @@ function App() {
     }
   };
   
+  function getSavedMovies() {
+    mainApi.getMovies()
+      .then((movies) => {
+        setInitialSavedMovies(movies);
+        movies.forEach((movie) => {
+          const newSavedMovie = initialMovies.find(i => i.id === movie.movieId);
+          if (newSavedMovie !== undefined) {
+            newSavedMovie.saved = true;
+            setInitialMovies(initialMovies.map(i => i.id === movie.movieId ? newSavedMovie : i));
+          }
+        })
+      })
+      .catch(() => {
+        setInitialSavedMovies([]);
+      })
+  };
+
   function handleSaveMovie(movie) {
     mainApi.saveMovie(movie)
-      .then((newSavedMovie) => {
-        setSavedMovies([newSavedMovie, ...savedMovies]);
+      .then(() => {
+        getSavedMovies();
+        const newSavedMovie = initialMovies.find(item => item.id === movie.id);
+        newSavedMovie.saved = true;
+        setInitialMovies(initialMovies.map(item => item.id === newSavedMovie.id ? newSavedMovie : item));
+        localStorage.setItem('movies', JSON.stringify(initialMovies));
       })
       .catch((err) => {
         console.log(err);

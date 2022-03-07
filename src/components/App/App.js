@@ -52,8 +52,7 @@ function App() {
     const token = localStorage.getItem('jwt');
     if (token) {
       auth.checkToken()
-        .then((res) => {
-          setCurrentUser(res);
+        .then(() => {
           setLoggedIn(true);
           })
           .catch((err) => {
@@ -68,9 +67,8 @@ function App() {
 
   React.useEffect(() => {
     if (loggedIn) {
-      mainApi.getUserInfo(localStorage.token)
-        .then((res) => {
-          setCurrentUser(res.name, res.email);
+      mainApi.getUserInfo()
+        .then(() => {
           setLoggedIn(true);
         })
         .catch((err) => {

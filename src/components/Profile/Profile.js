@@ -36,7 +36,7 @@ function Profile(props) {
       <Header loggedIn={props.loggedIn} />
       <section className="profile">
         <form className="profile__container">
-          <h2 className="profile__title">Привет, {currentUser.name}!</h2>
+          <h2 className="profile__title">{`Привет, ${currentUser.name}!`}</h2>
             <div className="profile__info">
               <label className="profile__label profile__label_type_title">
                 Имя

@@ -55,7 +55,7 @@ function MoviesCardList(props) {
   return (
     <section className="movies-card-list">
       {props.movies.length === 0 ? 
-        <span className="movies-card-list__span_active">{props.moviesMessage}</span> :
+        <span className="movies-card-list__span_active"></span> :
         <div className="movies-card-list__container">
         {moviesList.map((movie) => (
           <MoviesCard

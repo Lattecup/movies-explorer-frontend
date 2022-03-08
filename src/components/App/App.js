@@ -82,6 +82,7 @@ function App() {
         .then((res) => {
           if (res) {
             setLoggedIn(true);
+            navigate('/movies')
             setAllData();
           }
         })
@@ -89,7 +90,7 @@ function App() {
           console.log(err);
         })
     }
-  }, []);
+  }, [navigate]);
 
   React.useEffect(() => {
     moviesApi.getMovies()

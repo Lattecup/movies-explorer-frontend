@@ -17,13 +17,13 @@ function Profile(props) {
   function handleChangeName(evt) {
     setName(evt.target.value);
     setErrorName(evt.target.validationMessage);
-    setIsValid(evt.target.closest(".profile__info").checkValidity());
+    setIsValid(evt.target.closest(".profile__container").checkValidity());
   };
 
   function handleChangeEmail(evt) {
     setEmail(evt.target.value);
     setErrorEmail(evt.target.validationMessage);
-    setIsValid(evt.target.closest(".profile__info-data").checkValidity());
+    setIsValid(evt.target.closest(".profile__container").checkValidity());
   };
 
   function handleSubmit(evt) {
@@ -35,7 +35,7 @@ function Profile(props) {
     <>
       <Header loggedIn={props.loggedIn} />
       <section className="profile">
-        <div className="profile__container">
+        <form className="profile__container">
           <h2 className="profile__title">Привет, {currentUser.name}!</h2>
             <div className="profile__info">
               <label className="profile__label profile__label_type_title">
@@ -49,7 +49,7 @@ function Profile(props) {
               <input className="profile__input" name="email" type="email" required placeholder={email} error={errorEmail} isValid={isValid} onChange={handleChangeEmail} patter="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"/>
             </label>
           </div>
-        </div>
+        </form>
         <div className="profile__buttons">
           <button type="submit" className="profile__button profile__button_type_submit link" onSubmit={handleSubmit}>Редактировать</button>
           <button type="button" className="profile__button profile__button_type_logout link" aria-label="Выйти из аккаунта" onClick={props.onSignOut}>Выйти из аккаунта</button>

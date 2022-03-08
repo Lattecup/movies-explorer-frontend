@@ -10,23 +10,93 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import react from 'react';
+import * as mainApi from '../../utils/MainApi';
+import { moviesApi } from '../../utils/MoviesApi';
 
 function App() {
+
+  const navigate = useNavigate();
 
   const [currentUser, setCurrentUser] = React.useState({});
 
   const [loggedIn, setLoggedIn] = React.useState(false);
 
-  const [movies, setMovies] = react.useState([]);
+  const [movies, setMovies] = React.useState([]);
+  const [savedMovies, setSavedMovies] = React.useState([]);
+
+  function getAllData() {
+    Promise.all([mainApi.getUserInfo(), mainApi.getUserMovies()])
+     .then(([userInfo, savedMovies]) => {
+       setCurrentUser(userInfo.user);
+       setSavedMovies(savedMovies);
+       console.log(userInfo.user);
+     })
+     .catch((err) => {
+       console.log(err);
+     })
+  };
+
+  function handleRegistration(name, email, password) {
+    mainApi.register(name, email, password)
+      .then(() => {
+        handleAuthorization(email, password);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
+  function handleAuthorization(email, password) {
+    mainApi.authorize(email, password)
+      .then((res) => {
+        localStorage.getItem('token', res.token);
+        setLoggedIn(true);
+        navigate('/movies');
+        getAllData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      mainApi.checkToken()
+        .then(() => {
+          setLoggedIn(true);
+          navigate('/movies');
+          getAllData();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  }, [navigate]);
+
+  function handleSignOut() {
+    localStorage.removeItem('token');
+    navigate('/signin');
+    setLoggedIn(false);
+  };
+
+  React.useEffect(() => {
+    moviesApi.getMovies()
+      .then((movies) => {
+        setMovies(movies);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/signup" element={<Register />} />
-          <Route path="/signin" element={<Login />} />
+          <Route path="/signup" element={<Register onRegistration={handleRegistration} />} />
+          <Route path="/signin" element={<Login onAuthorization={handleAuthorization} />} />
           <Route 
             path="/movies"
             element={
@@ -54,6 +124,7 @@ function App() {
               <ProtectedRoute loggedIn={loggedIn}>
                 <Profile
                   loggedIn={loggedIn}
+                  onSignOut={handleSignOut}
                 />
               </ProtectedRoute>
             }

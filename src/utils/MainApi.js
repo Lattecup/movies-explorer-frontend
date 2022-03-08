@@ -41,6 +41,16 @@ export const signOut = () => {
   .then(handleResponse);
 };
 
+export const checkToken = () => {
+  return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(handleResponse);
+};
+
 export const getUserInfo = () => {
   return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
     credentials: 'include',

@@ -35,7 +35,7 @@ function Profile(props) {
     <>
       <Header loggedIn={props.loggedIn} />
       <section className="profile">
-        <form className="profile__container">
+        <form className="profile__container" onSubmit={handleSubmit}>
           <h2 className="profile__title">{`Привет, ${currentUser.name}!`}</h2>
             <div className="profile__info">
               <label className="profile__label profile__label_type_title">
@@ -53,7 +53,7 @@ function Profile(props) {
           </div>
         </form>
         <div className="profile__buttons">
-          <button type="submit" className={!isValid ? "profile__button profile__button_type_submit-disabled link" : "profile__button profile__button_type_submit link"} onSubmit={handleSubmit} disabled={!isValid}>Редактировать</button>
+          <button type="submit" className={!isValid ? "profile__button profile__button_type_submit-disabled link" : "profile__button profile__button_type_submit link"} disabled={!isValid}>Редактировать</button>
           <button type="button" className="profile__button profile__button_type_logout link" aria-label="Выйти из аккаунта" onClick={props.onSignOut}>Выйти из аккаунта</button>
         </div>
       </section>

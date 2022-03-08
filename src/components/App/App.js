@@ -99,7 +99,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
-  });
+  }, []);
 
   function handleSignOut() {
     localStorage.removeItem('token');
@@ -129,7 +129,6 @@ function App() {
             <ProtectedRoute loggedIn={loggedIn}>
               <Movies
                 movies={movies}
-                loggedIn={loggedIn}
               />
             </ProtectedRoute>
             }
@@ -138,7 +137,6 @@ function App() {
             <ProtectedRoute loggedIn={loggedIn}>
               <SavedMovies
                 movies={movies}
-                loggedIn={loggedIn}
               />
             </ProtectedRoute>
             }
@@ -146,7 +144,6 @@ function App() {
           <Route path='/profile' element={
             <ProtectedRoute loggedIn={loggedIn}>
               <Profile
-                loggedIn={loggedIn}
                 onSignOut={handleSignOut}
                 onChangeProfile={handleChangeProfile}
               />

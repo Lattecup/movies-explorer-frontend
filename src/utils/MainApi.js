@@ -18,7 +18,7 @@ export const register = (name, email, password) => {
   .then(handleResponse);
 };
 
-export const checkToken = (token) => {
+export const checkToken = () => {
   return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
     credentials: 'include',
     method: 'GET',

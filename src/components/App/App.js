@@ -27,7 +27,7 @@ function App() {
   function getAllData() {
     Promise.all([mainApi.getUserInfo(), mainApi.getUserMovies()])
      .then(([userInfo, savedMovies]) => {
-       setCurrentUser(userInfo.user);
+       setCurrentUser(userInfo);
        setSavedMovies(savedMovies);
        console.log(userInfo.user);
      })

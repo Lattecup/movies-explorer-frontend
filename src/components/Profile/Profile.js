@@ -53,7 +53,7 @@ function Profile(props) {
           </div>
         </form>
         <div className="profile__buttons">
-          <button type="submit" className="profile__button profile__button_type_submit link" onSubmit={handleSubmit} disabled={!isValid}>Редактировать</button>
+          <button type="submit" className={!isValid ? "profile__button profile__button_type_submit-disabled link" : "profile__button profile__button_type_submit link"} onSubmit={handleSubmit} disabled={!isValid}>Редактировать</button>
           <button type="button" className="profile__button profile__button_type_logout link" aria-label="Выйти из аккаунта" onClick={props.onSignOut}>Выйти из аккаунта</button>
         </div>
       </section>

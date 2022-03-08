@@ -3,6 +3,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -114,6 +115,10 @@
 
 .profile__button_type_submit {
   color: #000000;
+}
+
+.profile__button_type_submit-disabled {
+  color: #A0A0A0;
 }
 
 .profile__button_type_logout {

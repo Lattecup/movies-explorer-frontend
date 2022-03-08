@@ -134,7 +134,7 @@ function App() {
                 <Profile
                   loggedIn={loggedIn}
                   onSignOut={handleSignOut}
-                  onChangeUser={handleChangeUserInfo}
+                  onChangeProfile={handleChangeUserInfo}
                 />
               </ProtectedRoute>
             }

@@ -18,17 +18,6 @@ export const register = (name, email, password) => {
   .then(handleResponse);
 };
 
-export const checkToken = () => {
-  return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
-    credentials: 'include',
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  .then(handleResponse);
-};
-
 export const authorize = (email, password) => {
   return fetch('https://api.movies-explorer.nomoredomains.xyz/signin', {
     credentials: 'include',
@@ -38,6 +27,17 @@ export const authorize = (email, password) => {
     },
     body: JSON.stringify({ email, password })
   })
+  .then(handleResponse);
+};
+
+export const signOut = () => {
+  return fetch('https://api.movies-explorer.nomoredomains.xyz/signout', {
+    credentials: 'include',
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }) 
   .then(handleResponse);
 };
 

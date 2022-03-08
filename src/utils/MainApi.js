@@ -1,5 +1,3 @@
-export const BASE_URL = 'https://api.movies-explorer.nomoredomains.xyz';
-
 function handleResponse(res) {
   if (res.ok) {
     return res.json();
@@ -9,7 +7,7 @@ function handleResponse(res) {
 };
 
 export const register = (name, email, password) => {
-  return fetch(`${BASE_URL}/signup`, {
+  return fetch('https://api.movies-explorer.nomoredomains.xyz/signup', {
     credentials: 'include',
     method: 'POST',
     headers: {
@@ -21,7 +19,7 @@ export const register = (name, email, password) => {
 };
 
 export const checkToken = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
+  return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
     credentials: 'include',
     method: 'GET',
     headers: {
@@ -32,7 +30,7 @@ export const checkToken = (token) => {
 };
 
 export const authorize = (email, password) => {
-  return fetch(`${BASE_URL}/signin`, {
+  return fetch('https://api.movies-explorer.nomoredomains.xyz/signin', {
     credentials: 'include',
     method: 'POST',
     headers: {
@@ -43,8 +41,8 @@ export const authorize = (email, password) => {
   .then(handleResponse);
 };
 
-export const getUserInfo = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
+export const getUserInfo = () => {
+  return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
     credentials: 'include',
     method: 'GET',
     headers: {
@@ -55,7 +53,7 @@ export const getUserInfo = (token) => {
 };
 
 export const setUserInfo = (data) => {
-  return fetch(`${BASE_URL}/users/me`, {
+  return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
     credentials: 'include',
     method: 'PATCH',
     headers: {
@@ -69,8 +67,8 @@ export const setUserInfo = (data) => {
   .then(handleResponse);
 };
 
-export const getUserMovies = (token) => {
-  return fetch(`${BASE_URL}/movies`, {
+export const getUserMovies = () => {
+  return fetch('https://api.movies-explorer.nomoredomains.xyz/movies', {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
@@ -80,7 +78,7 @@ export const getUserMovies = (token) => {
 };
 
 export const saveMovie = (movie) => {
-  return fetch(`${BASE_URL}/movies`, {
+  return fetch('https://api.movies-explorer.nomoredomains.xyz/movies', {
     credentials: 'include',
     method: 'POST',
     headers: {
@@ -104,7 +102,7 @@ export const saveMovie = (movie) => {
 };
 
 export const deleteMovie = (movieId) => {
-  return fetch(`${BASE_URL}/movies/${movieId}`, {
+  return fetch(`https://api.movies-explorer.nomoredomains.xyz/movies/${movieId}`, {
     credentials: 'include',
     method: 'DELETE',
     headers: {

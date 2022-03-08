@@ -24,13 +24,10 @@ function App() {
   const [movies, setMovies] = React.useState([]);
   const [savedMovies, setSavedMovies] = React.useState([]);
 
-  const [isLoading, setIsLoading] = React.useState(false);
-
   function setAllData() {
-    Promise.all([mainApi.getUserInfo(), moviesApi.getMovies(), mainApi.getUserMovies()])
-      .then(([userInfo, initialMovies, savedMovies]) => {
+    Promise.all([mainApi.getUserInfo(), mainApi.getUserMovies()])
+      .then(([userInfo, savedMovies]) => {
         setCurrentUser(userInfo);
-        setMovies(initialMovies);
         setSavedMovies(savedMovies);
       })
       .catch((err) => {
@@ -54,7 +51,7 @@ function App() {
     mainApi.authorize(email, password)
       .then((res) => {
         if (res) {
-          localStorage.setItem('jwt', res.token);
+          localStorage.setItem('token', res.token);
           setLoggedIn(true);
           setAllData();
           navigate('/movies');
@@ -66,7 +63,7 @@ function App() {
   };
 
   function getUserInfo() {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('token');
     mainApi.getUserInfo(token)
       .then((data) => {
         if (data) {
@@ -79,7 +76,7 @@ function App() {
   };
 
   React.useEffect(() => {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('token');
     if (token) {
       mainApi.checkToken()
         .then((res) => {
@@ -94,15 +91,24 @@ function App() {
     }
   }, []);
 
+  React.useEffect(() => {
+    moviesApi.getMovies()
+      .then((movies) => {
+        setMovies(movies);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  });
 
   function handleSignOut() {
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('token');
     navigate('/');
     setLoggedIn(false);
-  }
+  };
 
   function handleChangeProfile(data) {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('token');
     mainApi.setUserInfo(data, token)
       .then((data) => {
         setCurrentUser(data);
@@ -123,6 +129,7 @@ function App() {
             <ProtectedRoute loggedIn={loggedIn}>
               <Movies
                 movies={movies}
+                loggedIn={loggedIn}
               />
             </ProtectedRoute>
             }
@@ -131,6 +138,7 @@ function App() {
             <ProtectedRoute loggedIn={loggedIn}>
               <SavedMovies
                 movies={movies}
+                loggedIn={loggedIn}
               />
             </ProtectedRoute>
             }
@@ -138,6 +146,7 @@ function App() {
           <Route path='/profile' element={
             <ProtectedRoute loggedIn={loggedIn}>
               <Profile
+                loggedIn={loggedIn}
                 onSignOut={handleSignOut}
                 onChangeProfile={handleChangeProfile}
               />

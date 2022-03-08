@@ -1,84 +1,115 @@
-class MainApi {
-  constructor(options) {
-    this._url = options.url;
-    this._headers = options.headers;
+export const BASE_URL = 'https://api.movies-explorer.nomoredomains.xyz';
+
+function handleResponse(res) {
+  if (res.ok) {
+    return res.json();
   };
 
-  _handleResponse(res) {
-    if (res.ok) {
-      return res.json();
-    };
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  };
-
-  getUserInfo(token) {
-    return fetch(this._url + '/users/me', {
-      credentials: 'include',
-      method: 'GET',
-      headers: this._headers,
-    })
-    .then(this._handleResponse);
-  };
-
-  setUserInfo(data) {
-    return fetch(this.url + '/users/me', {
-      credentials: 'include',
-      method: 'PATCH',
-      headers: this._headers,
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-      })
-    })
-    .then(this._handleResponse);
-  };
-
-  getMovies(token) {
-    return fetch(this._url + '/movies', {
-      credentials: 'include',
-      method: 'GET',
-      headers: this._headers, 
-    })
-    .then(this._handleResponse);
-  };
-
-  saveMovie(movie) {
-    return fetch(this.url + '/movies', {
-      credentials: 'include',
-      method: 'POST',
-      headers: this._headers,
-      body: JSON.stringify({
-        country: movie.country,
-        director: movie.director,
-        duration: movie.director,
-        year: movie.year,
-        description: movie.description,
-        image: movie.image.url,
-        trailerLink: movie.trailerLink,
-        thumbnail: movie.thumbnail,
-        movieId: movie.movieId,
-        nameRU: movie.nameRU,
-        nameEN: movie.nameEN,
-      })
-    })
-    .then(this._handleResponse);
-  };
-
-  removeMovie(movieId) {
-    return fetch(this.url + `/movies/${movieId}`, {
-      credentials: 'include',
-      method: 'DELETE',
-      headers: this._headers,
-    })
-    .then(this._handleResponse);
-  };
+  return Promise.reject(`Ошибка: ${res.status}`);
 };
 
-export const mainApi = new MainApi({
-  url: 'https://api.movies-explorer.nomoredomains.xyz',
-  credentials: 'include',
-  headers: {
-    'Content-Type': 'application/json',
-  }
-});
+export const register = (name, email, password) => {
+  return fetch(`${BASE_URL}/signup`, {
+    credentials: 'include',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, email, password })
+  })
+  .then(handleResponse);
+};
+
+export const checkToken = (token) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    credentials: 'include',
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(handleResponse);
+};
+
+export const authorize = (email, password) => {
+  return fetch(`${BASE_URL}/signin`, {
+    credentials: 'include',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password })
+  })
+  .then(handleResponse);
+};
+
+export const getUserInfo = (token) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    credentials: 'include',
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(handleResponse);
+};
+
+export const setUserInfo = (data) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    credentials: 'include',
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: data.name,
+      email: data.email,
+    })
+  })
+  .then(handleResponse);
+};
+
+export const getUserMovies = (token) => {
+  return fetch(`${BASE_URL}/movies`, {
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(handleResponse);
+};
+
+export const saveMovie = (movie) => {
+  return fetch(`${BASE_URL}/movies`, {
+    credentials: 'include',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      country: movie.country,
+      director: movie.director,
+      duration: movie.director,
+      year: movie.year,
+      description: movie.description,
+      image: movie.image.url,
+      trailerLink: movie.trailerLink,
+      thumbnail: movie.thumbnail,
+      movieId: movie.movieId,
+      nameRU: movie.nameRU,
+      nameEN: movie.nameEN,
+    })
+  })
+  .then(handleResponse);
+};
+
+export const deleteMovie = (movieId) => {
+  return fetch(`${BASE_URL}/movies/${movieId}`, {
+    credentials: 'include',
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+     },
+  })
+  .then(handleResponse);
+};

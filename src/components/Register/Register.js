@@ -38,12 +38,6 @@ function Register(props) {
     props.onRegistration(name, email, password);
   };
 
-  React.useEffect(() => {
-    setName('');
-    setEmail('');
-    setPassword('');
-  }, []);
-
   return (
     <section className="register">
       <FormTop title="Добро пожаловать!" />

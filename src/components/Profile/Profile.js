@@ -6,8 +6,9 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 function Profile(props) {
 
   const currentUser = React.useContext(CurrentUserContext);
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
+
+  const [name, setName] = React.useState(currentUser.name);
+  const [email, setEmail] = React.useState(currentUser.email);
 
   const [errorName, setErrorName] = React.useState('');
   const [errorEmail, setErrorEmail] = React.useState('');
@@ -39,13 +40,13 @@ function Profile(props) {
             <div className="profile__info">
               <label className="profile__label profile__label_type_title">
                 Имя
-                <input className="profile__input" name="name" maxLength="30" minLength="2" type="text" required placeholder={currentUser.name} error={errorName} isValid={isValid} onChange={handleChangeName}/>
+                <input className="profile__input" name="name" maxLength="30" minLength="2" type="text" required placeholder={name} error={errorName} isValid={isValid} onChange={handleChangeName}/>
               </label>
             </div>
           <div className="profile__info-data">
             <label className="profile__label profile__label_type_title">
               E-mail
-              <input className="profile__input" name="email" type="email" required placeholder={currentUser.email} error={errorEmail} isValid={isValid} onChange={handleChangeEmail} patter="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"/>
+              <input className="profile__input" name="email" type="email" required placeholder={email} error={errorEmail} isValid={isValid} onChange={handleChangeEmail} patter="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"/>
             </label>
           </div>
         </div>

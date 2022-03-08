@@ -8,8 +8,8 @@ import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
-import * as auth from '../../utils/AuthApi';
-import { mainApi } from '../../utils/MainApi';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import * as mainApi from '../../utils/MainApi';
 import { moviesApi } from '../../utils/MoviesApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
@@ -27,7 +27,7 @@ function App() {
   const [isLoading, setIsLoading] = React.useState(false);
 
   function setAllData() {
-    Promise.all([mainApi.getUserInfo(), moviesApi.getMovies(), mainApi.getMovies()])
+    Promise.all([mainApi.getUserInfo(), moviesApi.getMovies(), mainApi.getUserMovies()])
       .then(([userInfo, initialMovies, savedMovies]) => {
         setCurrentUser(userInfo);
         setMovies(initialMovies);
@@ -39,7 +39,7 @@ function App() {
   };
 
   function handleRegistration(name, email, password) {
-    auth.register(name, email, password)
+    mainApi.register(name, email, password)
       .then((res) => {
         if (res) {
           handleAuthorization(email, password);
@@ -51,7 +51,7 @@ function App() {
   };
 
   function handleAuthorization(email, password) {
-    auth.authorize(email, password)
+    mainApi.authorize(email, password)
       .then((res) => {
         if (res) {
           localStorage.setItem('jwt', res.token);
@@ -81,7 +81,7 @@ function App() {
   React.useEffect(() => {
     const token = localStorage.getItem('jwt');
     if (token) {
-      auth.checkToken()
+      mainApi.checkToken()
         .then((res) => {
           if (res) {
             setLoggedIn(true);
@@ -101,19 +101,52 @@ function App() {
     setLoggedIn(false);
   }
 
+  function handleChangeProfile(data) {
+    const token = localStorage.getItem('jwt');
+    mainApi.setUserInfo(data, token)
+      .then((data) => {
+        setCurrentUser(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Routes>
+          <Route path="/" element={<Main />} />
           <Route path="/signup" element={<Register onRegistration={handleRegistration} />} />
           <Route path="/signin" element={<Login onAuthorization={handleAuthorization} />} />
-          <Route path="/" element={<Main />} />
-          <Route path="/movies" element={<Movies loggedIn={loggedIn} movies={movies} />} />
-          <Route path="/saved-movies" element={<SavedMovies loggedIn={loggedIn} movies={movies} />} />
-          <Route path="/profile" element={<Profile loggedIn={loggedIn} onSignOut={handleSignOut}/>} />
+          <Route path="/movies" element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <Movies
+                movies={movies}
+              />
+            </ProtectedRoute>
+            }
+          />
+          <Route path="/saved-movies" element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <SavedMovies
+                movies={movies}
+              />
+            </ProtectedRoute>
+            }
+          />
+          <Route path='/profile' element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <Profile
+                onSignOut={handleSignOut}
+                onChangeProfile={handleChangeProfile}
+              />
+            </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-    </div>
+      </div>
     </CurrentUserContext.Provider>
   );
 };

@@ -29,7 +29,6 @@ function App() {
      .then(([userInfo, savedMovies]) => {
        setCurrentUser(userInfo);
        setSavedMovies(savedMovies);
-       console.log(userInfo.user);
      })
      .catch((err) => {
        console.log(err);
@@ -79,6 +78,16 @@ function App() {
     setLoggedIn(false);
   };
 
+  function handleChangeUserInfo() {
+    mainApi.setUserInfo()
+      .then((data) => {
+        setCurrentUser(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
   React.useEffect(() => {
     moviesApi.getMovies()
       .then((movies) => {
@@ -125,6 +134,7 @@ function App() {
                 <Profile
                   loggedIn={loggedIn}
                   onSignOut={handleSignOut}
+                  onChangeUser={handleChangeUserInfo}
                 />
               </ProtectedRoute>
             }

@@ -65,14 +65,13 @@ function App() {
       mainApi.checkToken()
         .then(() => {
           setLoggedIn(true);
-          navigate('/movies');
           getAllData();
         })
         .catch((err) => {
           console.log(err);
         });
     };
-  }, [navigate]);
+  }, []);
 
   function handleSignOut() {
     localStorage.removeItem('token');
@@ -114,6 +113,7 @@ function App() {
               <ProtectedRoute loggedIn={loggedIn}>
                 <SavedMovies
                   loggedIn={loggedIn}
+                  movies={movies}
                 />
               </ProtectedRoute>
             }

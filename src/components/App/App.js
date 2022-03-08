@@ -78,8 +78,8 @@ function App() {
     setLoggedIn(false);
   };
 
-  function handleChangeUserInfo() {
-    mainApi.setUserInfo()
+  function handleChangeUserInfo(data) {
+    mainApi.setUserInfo(data)
       .then((data) => {
         setCurrentUser(data);
       })

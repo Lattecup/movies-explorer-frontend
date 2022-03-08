@@ -3,7 +3,6 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -28,6 +27,7 @@
 .profile__info {
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   border-bottom: 1px solid #E8E8E8;
   padding-bottom: 16px;
@@ -36,6 +36,7 @@
 .profile__info-data {
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding-top: 17px;
 }

@@ -28,7 +28,10 @@ function Profile(props) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    props.onChangeProfile(name, email);
+    props.onChangeProfile({ 
+      name: name, 
+      email: email
+    });
   };
 
   return (

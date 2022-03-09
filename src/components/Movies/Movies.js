@@ -13,11 +13,18 @@ function Movies(props) {
       <Header loggedIn={props.loggedIn} />
       <section className="movies">
         <SearchForm handleSearch={props.handleSearch} />
-        {props.isLoading && <Preloader />}
-        <MoviesCardList
-          movies={props.movies}
-          isLoading={props.isLoading}
-        />
+        {props.isLoading ? (
+          <Preloader />
+        ) : (
+          <MoviesCardList
+            movies={props.movies}
+            isLoading={props.isLoading}
+            moviesMessage={props.moviesMessage}
+            handleSaveMovie={props.handleSaveMovie}
+            handleDeleteMovie={props.handleDeleteMovie}
+            screenWidth={props.screenWidth}
+          />
+        )}
       </section>
       <Footer />
     </>

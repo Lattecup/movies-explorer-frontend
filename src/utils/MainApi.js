@@ -97,13 +97,13 @@ export const saveMovie = (movie) => {
     body: JSON.stringify({
       country: movie.country,
       director: movie.director,
-      duration: movie.director,
+      duration: movie.duration,
       year: movie.year,
       description: movie.description,
-      image: movie.image.url,
+      image: `https://api.nomoreparties.co${movie.image.url}`,
       trailerLink: movie.trailerLink,
-      thumbnail: movie.thumbnail,
-      movieId: movie.movieId,
+      thumbnail: `https://api.nomoreparties.co${movie.image.formats.url}`,
+      movieId: movie.id,
       nameRU: movie.nameRU,
       nameEN: movie.nameEN,
     })

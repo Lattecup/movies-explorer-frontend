@@ -13,11 +13,10 @@ function MoviesCardList(props) {
   const [isButtonActive, setIsButtonActive] = React.useState(false);
 
   function handleMoviesList() {
-    const screenWidth = window.innerWidth;
-    if (screenWidth >= 1280) {
+    if (props.screenWidth >= 1280) {
       setMoviesCount(12);
       setAddMoviesCount(3);
-    } else if (screenWidth >= 768) {
+    } else if (props.screenWidth >= 768) {
       setMoviesCount(8);
       setAddMoviesCount(2);
     } else {
@@ -35,7 +34,7 @@ function MoviesCardList(props) {
 
   React.useEffect(() => {
     handleMoviesList();
-  });
+  }, [props.screenWidth]);
 
   React.useEffect(() => {
     if (location === '/movies') {
@@ -55,13 +54,14 @@ function MoviesCardList(props) {
   return (
     <section className="movies-card-list">
       {props.movies.length === 0 ? 
-        <span className="movies-card-list__span_active"></span> :
+        <span className="movies-card-list__span_active">{props.moviesMessage}</span> :
         <div className="movies-card-list__container">
         {moviesList.map((movie) => (
           <MoviesCard
             key={movie.id || movie.movieId}
             movie={movie}
             handleSaveMovie={props.handleSaveMovie}
+            handleDeleteMovie={props.handleDeleteMovie}
           />
         ))}
       </div>

@@ -38,25 +38,25 @@ function Profile(props) {
     <>
       <Header loggedIn={props.loggedIn} />
       <section className="profile">
-        <form className="profile__container" onSubmit={handleSubmit}>
+        <form className="profile__container" noValidate>
           <h2 className="profile__title">{`Привет, ${currentUser.name}!`}</h2>
             <div className="profile__info">
               <label className="profile__label profile__label_type_title">
                 Имя
-                <input className="profile__input" name="name" maxLength="30" minLength="2" type="text" required placeholder={name} error={errorName} isValid={isValid} onChange={handleChangeName}/>
+                <input className="profile__input" name="name" maxLength="30" minLength="2" type="text" required placeholder={name} onChange={handleChangeName}/>
               </label>
               <span className="profile__input-error profile__input-error_active">{errorName}</span>
             </div>
           <div className="profile__info-data">
             <label className="profile__label profile__label_type_title">
               E-mail
-              <input className="profile__input" name="email" type="email" required placeholder={email} error={errorEmail} isValid={isValid} onChange={handleChangeEmail} patter="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"/>
+              <input className="profile__input" name="email" type="email" required placeholder={email} onChange={handleChangeEmail} patter="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"/>
             </label>
             <span className="profile__input-error profile__input-error_active">{errorEmail}</span>
           </div>
         </form>
         <div className="profile__buttons">
-          <button type="submit" className={!isValid ? "profile__button profile__button_type_submit-disabled link" : "profile__button profile__button_type_submit link"} disabled={!isValid}>Редактировать</button>
+          <button type="submit" className={!isValid ? "profile__button profile__button_type_submit-disabled link" : "profile__button profile__button_type_submit link"} disabled={!isValid} onClick={handleSubmit}>Редактировать</button>
           <button type="button" className="profile__button profile__button_type_logout link" aria-label="Выйти из аккаунта" onClick={props.onSignOut}>Выйти из аккаунта</button>
         </div>
       </section>

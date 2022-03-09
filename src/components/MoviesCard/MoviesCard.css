@@ -17,11 +17,15 @@
 }
 
 .movie__title {
+  max-width: 280px;
   margin: 0;
   font-weight: 600;
   font-size: 15px;
   line-height: 1.2;
   color: #000000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .movie__duration {
@@ -67,6 +71,9 @@
     width: 339px;
     height: 258px;
   }
+  .movie-title {
+    max-width: 250px;
+  }
   .movie__image {
     height: 190px;
   }
@@ -76,6 +83,9 @@
   .movie {
     width: 300px;
     height: 236px;
+  }
+  .movie-title {
+    max-width: 210px;
   }
   .movie__image {
     height: 168px;

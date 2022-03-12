@@ -33,7 +33,7 @@ export const authorize = (email, password) => {
 export const signOut = () => {
   return fetch('https://api.movies-explorer.nomoredomains.xyz/signout', {
     credentials: 'include',
-    method: 'DELETE',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -41,7 +41,7 @@ export const signOut = () => {
   .then(handleResponse);
 };
 
-export const checkToken = () => {
+export const checkToken = (token) => {
   return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
     credentials: 'include',
     headers: {
@@ -51,10 +51,9 @@ export const checkToken = () => {
   .then(handleResponse);
 };
 
-export const getUserInfo = () => {
+export const getUserInfo = (token) => {
   return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
     credentials: 'include',
-    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -62,7 +61,7 @@ export const getUserInfo = () => {
   .then(handleResponse);
 };
 
-export const setUserInfo = (data) => {
+export const setUserInfo = (data, token) => {
   return fetch('https://api.movies-explorer.nomoredomains.xyz/users/me', {
     credentials: 'include',
     method: 'PATCH',
@@ -77,7 +76,7 @@ export const setUserInfo = (data) => {
   .then(handleResponse);
 };
 
-export const getUserMovies = () => {
+export const getUserMovies = (token) => {
   return fetch('https://api.movies-explorer.nomoredomains.xyz/movies', {
     credentials: 'include',
     headers: {
@@ -111,8 +110,8 @@ export const saveMovie = (movie) => {
   .then(handleResponse);
 };
 
-export const deleteMovie = (movieId) => {
-  return fetch(`https://api.movies-explorer.nomoredomains.xyz/movies/${movieId}`, {
+export const deleteMovie = (id) => {
+  return fetch(`https://api.movies-explorer.nomoredomains.xyz/movies/${id}`, {
     credentials: 'include',
     method: 'DELETE',
     headers: {

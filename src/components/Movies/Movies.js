@@ -12,17 +12,20 @@ function Movies(props) {
     <>
       <Header loggedIn={props.loggedIn} />
       <section className="movies">
-        <SearchForm handleSearch={props.handleSearch} />
+        <SearchForm
+          moviesList={props.moviesList} 
+          handleSearch={props.handleSearch}
+        />
         {props.isLoading ? (
           <Preloader />
         ) : (
           <MoviesCardList
-            movies={props.movies}
+            moviesList={props.moviesList}
+            savedMoviesList={props.savedMoviesList}
             isLoading={props.isLoading}
-            moviesMessage={props.moviesMessage}
             handleSaveMovie={props.handleSaveMovie}
             handleDeleteMovie={props.handleDeleteMovie}
-            screenWidth={props.screenWidth}
+            handleSearch={props.handleSearch}
           />
         )}
       </section>

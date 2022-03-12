@@ -4,23 +4,15 @@ import { useLocation } from 'react-router';
 
 function MoviesCard(props) {
 
-  const [isSaved, setIsSaved] = React.useState(false);
-
-  const location = useLocation();
+  const location = useLocation().pathname;
   const image = props.movie.image.url ? `https://api.nomoreparties.co${props.movie.image.url}` : props.movie.image;
   const duration = `${Math.floor(props.movie.duration / 60)}ч ${props.movie.duration % 60}м`;
-  const movieSaveButtonClassName = isSaved ? 'movie__button movie__button_type_saved link' : 'movie__button movie__button_type_save link';
 
-  
-  function handleSaveMovieButtonActive() {
-    setIsSaved(true);
+  function isSaved() {
+    return props.savedMoviesList.some((i) => i.movieId === props.movie.id);
   };
 
-  function handleSaveMovieButtonInactive() {
-    setIsSaved(false);
-  };
-
-   function handleSaveClick() {
+  function handleSaveClick() {
     props.handleSaveMovie(props.movie);
   };
 
@@ -29,21 +21,17 @@ function MoviesCard(props) {
   };
 
   return (
-    <div className="movie" onMouseOver={handleSaveMovieButtonActive} onMouseOut={handleSaveMovieButtonInactive}>
+    <div className="movie">
       <div className="movie__container">
         <div className="movie__info">
           <p className="movie__title">{props.movie.nameRU}</p>
           <p className="movie__duration">{duration}</p>
         </div>
-        {location.pathname === '/saved-movies' && (
-          <button className="movie__button movie__button_type_delete link" type="submit" onClick={handleDeleteClick}/>
+        {location === '/movies' ? (
+          <button type="submit" className={`movie__save-button link ${isSaved() && `movie__save-button_active`}`} onClick={isSaved() ? handleDeleteClick : handleSaveClick} />
+        ) : (
+          <button type="submit" className="movie__delete-button link" onClick={handleDeleteClick} />
         )}
-        {location.pathname === '/movies' && props.movie.saved === true && (
-          <button type="submit" className="movie__button movie__button_type_saved link" onClick={handleDeleteClick}/>
-        )}
-        {location.pathname === '/movies' && props.movie.saved !== true && (
-          <button type="submit" className={movieSaveButtonClassName} onClick={handleSaveClick}/>
-        )} 
       </div>
       <a href={props.movie.trailerLink} alt={props.movie.nameRU} target='_blank' rel="noreferrer">
         <img src={image} className="movie__image" alt="Постер фильма"/>

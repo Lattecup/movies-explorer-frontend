@@ -21,18 +21,19 @@ function App() {
 
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [token, setToken] = React.useState("");
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [movies, setMovies] = React.useState([]);
-  const [savedMovies, setSavedMovies] = React.useState([]);
-  const [moviesMessage, setMoviesMessage] = React.useState("");
-  const [initialMovies, setInitialMovies] = React.useState([]);
-  const [initialSavedMovies, setInitialSavedMovies] = React.useState([]);
+  const [moviesList, setMoviesList] = React.useState([]);
+  const [savedMoviesList, setSavedMoviesList] = React.useState([]);
+
+  const keyword = localStorage.getItem('keyword');
+  const initialMovies = JSON.parse(localStorage.getItem('initialMovies'));
+  const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+  const allMovies = JSON.parse(localStorage.getItem('allMovies'));
+  const initialSavedMovies = JSON.parse(localStorage.getItem('initialSavedMovies'));
 
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
-  const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
 
   function closeAllPopups() {
     setIsInfoTooltipOpen(false);
@@ -47,43 +48,27 @@ function App() {
       return () => document.removeEventListener('keydown', handleEscClose);
   }, []);
 
-  function updateWindowSize() {
-    setTimeout(() => {
-      setScreenWidth(window.innerWidth);
-    }, 1000);
-  };
-
-  React.useEffect(() => {
-    window.addEventListener('resize', updateWindowSize);
-    return () => window.removeEventListener('resize', updateWindowSize);
-  });
-
-  React.useEffect(() => {
-    getToken();
-    setIsLoading(true);
-    Promise.all([mainApi.getUserInfo(), moviesApi.getMovies()])
-      .then(([userInfo, savedMovies]) => {
+  function getAlldata() {
+    Promise.all([mainApi.getUserInfo(), mainApi.getUserMovies(), moviesApi.getMovies()])
+      .then(([userInfo, savedMovies, initialMovies]) => {
         setCurrentUser(userInfo);
-        if (localStorage.getItem('movies') === null) {
-          localStorage.setItem('movies', JSON.stringify(savedMovies));
-          setInitialMovies(savedMovies);
-        } else {
-          setInitialMovies(JSON.parse(localStorage.getItem('movies')));
-        }
+        setSavedMoviesList(savedMovies);
+        setMoviesList(initialMovies);
+        localStorage.setItem('initialMovies', JSON.stringify(initialMovies));
+        localStorage.setItem('initialSavedMovies', JSON.stringify(savedMovies));
+        localStorage.setItem('allMovies', JSON.stringify(initialMovies));
+        localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
-  }, []);
+  };
 
   function handleRegistration(name, email, password) {
     mainApi.register(name, email, password)
       .then(() => {
         handleAuthorization(email, password);
-        setIsSuccess(true)
+        setIsSuccess(true);
       })
       .catch((err) => {
         console.log(err);
@@ -98,8 +83,8 @@ function App() {
     mainApi.authorize(email, password)
       .then((res) => {
         localStorage.setItem('token', res.token);
-        setToken(res.token);
         setLoggedIn(true);
+        getAlldata();
         navigate('/movies');
       })
       .catch((err) => {
@@ -107,28 +92,37 @@ function App() {
       });
   };
 
-  function getToken() {
+  React.useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setToken(token);
       mainApi.checkToken(token)
-        .then(() => {
+        .then((userInfo) => {
+          setCurrentUser(userInfo);
           setLoggedIn(true);
         })
         .catch((err) => {
           console.log(err);
         });
     };
-  };
+  }, []);
 
   function handleSignOut() {
+    mainApi.signOut().catch((err) => err);
     localStorage.removeItem('token');
-    navigate('/signin');
+    localStorage.removeItem('initialMovies');
+    localStorage.removeItem('allMovies');
+    localStorage.removeItem('savedMovies');
+    localStorage.removeItem('initialSavedMovies');
+    localStorage.removeItem('keyword');
+    setSavedMoviesList([]);
+    setMoviesList([]);
+    setCurrentUser({});
     setLoggedIn(false);
-    localStorage.clear();
+    navigate('/');
   };
 
   function handleChangeUserInfo(data) {
+    const token = localStorage.getItem('token');
     mainApi.setUserInfo(data, token)
       .then((data) => {
         setCurrentUser(data);
@@ -143,55 +137,47 @@ function App() {
       });
   };
 
-  function getSavedMovies() {
-    mainApi.getUserMovies()
-      .then((movies) => {
-        setInitialSavedMovies(movies);
-        movies.forEach((movie) => {
-          const newSavedMovie = initialMovies.find((i) => i.id === movie.movieId);
-          if (newSavedMovie !== undefined) {
-            newSavedMovie.saved = true;
-            setInitialMovies(initialMovies.map((i) => i.id === movie.movieId ? newSavedMovie : i))
-          }
+  React.useEffect(() => {
+    const allMovies = JSON.parse(localStorage.getItem('allMovies'));
+    if (!allMovies) {
+      setIsLoading(true);
+      moviesApi.getMovies()
+        .then((data) => {
+          localStorage.setItem('allMovies', JSON.stringify(data));
+          localStorage.setItem('initialMovies', JSON.stringify(data));
+          setIsLoading(false);
+          setMoviesList(data);
         })
-      })
-      .catch(() => {
-        setInitialSavedMovies([]);
-      });
-  };
-
-  function handleSearch(checked) {
-    getSavedMovies();
-    let sortedMovies;
-    const keyword = localStorage.getItem('keyword') || '';
-    const filteredMovies = location === '/movies' ? initialMovies : initialSavedMovies;
-
-    if (keyword.length > 0) {
-      sortedMovies = filteredMovies.filter((movie) => movie.nameRU.toLowerCase().includes(keyword.toLowerCase()));
-      sortedMovies.length === 0 && setMoviesMessage('Ничего не найдено');
-      if (checked) {
-        location === '/movies' ?
-          setMovies(sortedMovies.filter((movie) => movie.duration <= 40)) :
-          setSavedMovies(sortedMovies.filter((movie) => movie.duration <= 40));
-      } else {
-        location === '/movies' ?
-          setMovies(sortedMovies) :
-          setSavedMovies(sortedMovies);
-      }
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      setMovies([]);
-      setSavedMovies([]);
-    };
-  };
+      setMoviesList(allMovies);
+    }
+    const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+    if (!savedMovies && loggedIn) {
+      setIsLoading(true);
+      mainApi.getUserMovies()
+        .then((data) => {
+          localStorage.getItem('savedMovies', JSON.stringify(data));
+          localStorage.getItem('initialSavedMovies', JSON.stringify(data));
+          setSavedMoviesList(data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setSavedMoviesList(savedMovies);
+    }
+  }, []);
 
   function handleSaveMovie(movie) {
     mainApi.saveMovie(movie)
-      .then(() => {
-        getSavedMovies();
-        const newSavedMovie = initialMovies.find((i) => i.id === movie.id);
-        newSavedMovie.saved = true;
-        setInitialMovies(initialMovies.map((i) => i.id === newSavedMovie.id ? newSavedMovie : i))
-        localStorage.setItem('movies', JSON.stringify(initialMovies));
+      .then((data) => {
+        setSavedMoviesList([...savedMoviesList, data]);
+        localStorage.setItem('savedMovies', JSON.stringify([...savedMoviesList, data]));
+        localStorage.setItem('initialSavedMovies', JSON.stringify([...savedMoviesList, data]));
         setIsSuccess(true);
       })
       .catch((err) => {
@@ -204,14 +190,14 @@ function App() {
   };
 
   function handleDeleteMovie(movie) {
-    const deletedMovie = initialSavedMovies.find((i) => i.movieId === movie.id);
-    mainApi.deleteMovie(deletedMovie._id)
+    const id = movie.movieId || movie.id;
+    const movieId = movie._id || savedMoviesList.find((i) => i.movieId === movie.id)._id;
+    mainApi.deleteMovie(movieId)
       .then(() => {
-        getSavedMovies();
-        const movieToDelete = initialMovies.find((i) => i === movie);
-        delete movieToDelete.saved;
-        setInitialMovies(initialMovies.map((i) => i.id === movieToDelete.id ? movieToDelete : i));
-        localStorage.setItem('movies', JSON.stringify(initialMovies));
+        const movies = savedMoviesList.filter((i) => i.movieId !== id);
+        setSavedMoviesList(movies);
+        localStorage.setItem('savedMovies', JSON.stringify(movies));
+        localStorage.setItem('initialSavedMovies', JSON.stringify(movies));
         setIsSuccess(true);
       })
       .catch((err) => {
@@ -223,32 +209,37 @@ function App() {
       });
   };
 
-  function handleDeleteSavedMovie(movie) {
-    mainApi.deleteMovie(movie._id)
-      .then(() => {
-        getSavedMovies();
-        const newMovies = savedMovies.filter((i) => i !== movie);
-        const movieToDelete = initialMovies.find((i) => i.id === movie.movieId);
-        delete movieToDelete.saved;
-        setSavedMovies(newMovies);
-        setInitialMovies(initialMovies.map((i) => i.id === movieToDelete.id ? movieToDelete : i));
-        localStorage.setItem("movies", JSON.stringify(initialMovies));
-        setIsSuccess(true);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsSuccess(false);
-      })
-      .finally(() => {
-        setIsInfoTooltipOpen(true);
-      });
+  function handleSearch(keyword, checked) {
+    if (keyword && location === '/movies') {
+      const regExp = new RegExp(keyword, 'gi');
+      const filteredMovies = allMovies.filter((movie) => regExp.test(movie.nameRU) || regExp.test(movie.nameEN));
+      setMoviesList(filteredMovies);
+      if (checked) {
+        setMoviesList(filteredMovies.filter((movie) => movie.duration <= 40));
+      }
+    } else if (!keyword && location === '/movies') {
+      setMoviesList(initialMovies);
+    } else if (keyword && location === '/saved-movies') {
+      const regExp = new RegExp(keyword, 'gi');
+      const filteredMovies = savedMovies.filter((movie) => regExp.test(movie.nameRU) || regExp.test(movie.nameEN));
+      setSavedMoviesList(filteredMovies);
+      if (checked) {
+        setSavedMoviesList(filteredMovies.filter((movie) => movie.duration <= 40));
+      }
+    } else if (!keyword && location === '/saved-movies') {
+      setSavedMoviesList(initialSavedMovies);
+    }
   };
+
+  React.useEffect(() => {
+    location === '/movies' && handleSearch(allMovies, keyword);
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Routes>
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<Main loggedIn={loggedIn} />} />
           <Route path="/signup" element={<Register onRegistration={handleRegistration} />} />
           <Route path="/signin" element={<Login onAuthorization={handleAuthorization} />} />
           <Route 
@@ -256,14 +247,13 @@ function App() {
             element={
               <ProtectedRoute loggedIn={loggedIn}>
                 <Movies
-                  movies={movies}
+                  moviesList={moviesList}
+                  savedMoviesList={savedMoviesList}
                   loggedIn={loggedIn}
                   handleSearch={handleSearch}
                   handleSaveMovie={handleSaveMovie}
                   handleDeleteMovie={handleDeleteMovie}
-                  moviesMessage={moviesMessage}
                   isLoading={isLoading}
-                  screenWidth={screenWidth}
                 />
               </ProtectedRoute>
             }
@@ -274,13 +264,10 @@ function App() {
               <ProtectedRoute loggedIn={loggedIn}>
                 <SavedMovies
                   loggedIn={loggedIn}
-                  savedMovies={savedMovies}
+                  savedMoviesList={savedMoviesList}
                   handleSearch={handleSearch}
-                  handleSaveMovie={handleSaveMovie}
-                  handleDeleteMovie={handleDeleteSavedMovie}
-                  moviesMessage={moviesMessage}
+                  handleDeleteMovie={handleDeleteMovie}
                   isLoading={isLoading}
-                  screenWidth={screenWidth}
                 />
               </ProtectedRoute>
             }

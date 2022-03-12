@@ -1,9 +1,12 @@
 import React from 'react';
+import { useLocation } from 'react-router';
 import './SearchForm.css';
 
 function SearchForm(props) {
-
-  const [keyword, setKeyword] = React.useState('');
+  
+  const location = useLocation().pathname;
+  const keywordValue = localStorage.getItem('keyword');
+  const [keyword, setKeyword] = React.useState(keywordValue && location === '/movies' ? keywordValue : '');
   const [checked, setChecked] = React.useState(false);
 
   function handleKeyword(evt) {
@@ -16,14 +19,12 @@ function SearchForm(props) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    localStorage.setItem('keyword', keyword);
-    props.handleSearch(checked);
+    if (location === '/movies') {
+      props.handleSearch(props.moviesList, keyword, checked);
+    } else {
+      props.handleSearch(props.savedMoviesList, keyword, checked);
+    }
   };
-
-  React.useEffect(() => {
-    props.handleSearch(checked);
-    setKeyword(localStorage.getItem('keyword'));
-  }, []);
 
   React.useEffect(() => {
     props.handleSearch(checked);
@@ -33,7 +34,7 @@ function SearchForm(props) {
     <form className="search-form" onSubmit={handleSubmit}>
       <div className="search-form__input-container">
         <div className="search-form__input-icon" />
-        <input type="text" className="search-form__input" placeholder="Фильм" name="search" id="search" minLength="2" maxLength="30" required onChange={handleKeyword} value={keyword || ''} />
+        <input type="text" className="search-form__input" placeholder="Фильм" name="search" id="search" minLength="2" maxLength="30" required onChange={handleKeyword} value={keyword} />
         <button type="submit" className="search-form__submit-button link" onSubmit={handleSubmit}/>
       </div>
       <div className="search-form__checkbox-container">

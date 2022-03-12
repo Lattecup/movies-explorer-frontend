@@ -7,68 +7,77 @@ function MoviesCardList(props) {
 
   const location = useLocation().pathname;
 
-  const [moviesList, setMoviesList] = React.useState([]);
-  const [moviesCount, setMoviesCount] = React.useState(0);
-  const [addMoviesCount, setAddMoviesCount] = React.useState(0);
-  const [isButtonActive, setIsButtonActive] = React.useState(false);
+  const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
+  const isLaptop = screenWidth > 1279;
+  const isTablet = screenWidth > 767 && screenWidth < 1279;
+  const [moviesCount, setMoviesCount] = React.useState(12);
 
-  function handleMoviesList() {
-    if (props.screenWidth >= 1280) {
-      setMoviesCount(12);
-      setAddMoviesCount(3);
-    } else if (props.screenWidth >= 768) {
-      setMoviesCount(8);
-      setAddMoviesCount(2);
-    } else {
-      setMoviesCount(5);
-      setAddMoviesCount(2);
-    }
+  React.useEffect(() => {
+    setMoviesCount(isLaptop ? 12 : isTablet ? 8 : 5)
+  }, [screenWidth]);
+
+  function updateWindowSize() {
+    setTimeout(() => {
+      setScreenWidth(window.innerWidth);
+    }, 1000)
   };
+
+  React.useEffect(() => {
+    window.addEventListener('resize', updateWindowSize);
+    return () => window.removeEventListener('resize', updateWindowSize);
+  });
 
   function handleMoreButtonClick() {
-    setMoviesList(props.movies.slice(0, moviesList.length + addMoviesCount));
-    if (moviesList.length >= props.movies.length - addMoviesCount) {
-      setIsButtonActive(false);
-    };
+    isLaptop ? setMoviesCount(moviesCount + 3) :
+    isTablet ? setMoviesCount(moviesCount + 2) :
+               setMoviesCount(moviesCount + 2);
   };
-
-  React.useEffect(() => {
-    handleMoviesList();
-  }, [props.screenWidth]);
-
-  React.useEffect(() => {
-    if (location === '/movies') {
-      setMoviesList(props.movies.slice(0, moviesCount));
-      if (props.movies.length <= moviesCount) {
-        setIsButtonActive(false);
-      } else {
-        setIsButtonActive(true);
-      }
-    } else {
-      setMoviesList(props.movies);
-      setIsButtonActive(false);
-    }
-  }, [location, moviesCount, props.movies]);
-
 
   return (
     <section className="movies-card-list">
-      {props.movies.length === 0 ? 
-        <span className="movies-card-list__span_active">{props.moviesMessage}</span> :
-        <div className="movies-card-list__container">
-        {moviesList.map((movie) => (
-          <MoviesCard
-            key={movie.id || movie.movieId}
-            movie={movie}
-            handleSaveMovie={props.handleSaveMovie}
-            handleDeleteMovie={props.handleDeleteMovie}
-          />
-        ))}
+      {location === '/movies' && props.moviesList.length === 0 ? (
+        <span className="movies-card-list__span_active">Ничего не найдено</span>
+      ) : location === '/saved-movies' && props.savedMoviesList.length === 0 ? (
+        <span className="movies-card-list__span_active">Ничего не найдено</span>
+      ) : ('')
+      }
+      <div className="movies-card-list__container">
+        {location === '/movies' && props.moviesList && props.moviesList.map((movie, index) => {
+          if (index + 1 <= moviesCount) {
+            return (
+              <MoviesCard
+                key={index}
+                movie={movie}
+                savedMoviesList={props.savedMoviesList}
+                handleSaveMovie={props.handleSaveMovie}
+                handleDeleteMovie={props.handleDeleteMovie}
+            />
+            );
+          } else {
+            return '';
+          }
+        })}{''}
+        {location === '/saved-movies' && props.savedMoviesList && props.savedMoviesList.map((movie, index) => {
+          if (index + 1 <= moviesCount) {
+            return (
+              <MoviesCard
+                key={index}
+                movie={movie}
+                savedMoviesList={props.savedMoviesList}
+                handleDeleteMovie={props.handleDeleteMovie}
+              />
+            );
+          } else {
+            return '';
+          }
+        })}
       </div>
-      }
-      {isButtonActive &&
-      <button type="button" aria-label="Еще" className="movies-card-list__button link" onClick={handleMoreButtonClick}>Ещё</button>
-      }
+      {location === '/movies' && moviesCount < props.moviesList.length && (
+        <button type="button" aria-label="Ещё" className="movies-card-list__button link" onClick={handleMoreButtonClick}>Ещё</button>
+      )}
+      {location === '/saved-movies' && moviesCount < props.savedMoviesList.length && (
+        <button type="button" aria-label="Ещё" className="movies-card-list__button link" onClick={handleMoreButtonClick}>Ещё</button>
+      )}
     </section>
   );
 };

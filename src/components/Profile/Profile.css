@@ -118,7 +118,7 @@
   color: #000000;
 }
 
-.profile__button_type_submit-disabled {
+.profile__button:disabled {
   color: #A0A0A0;
 }
 

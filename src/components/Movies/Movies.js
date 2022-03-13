@@ -8,6 +8,15 @@ import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
 
+  function setShortMovies() {
+    if (props.checkboxStatus === true) {
+      const filteredMovies = props.moviesList.filter((movie) => movie.duration <= 40);
+      return filteredMovies;
+    } else {
+      return props.moviesList;
+    }
+  };
+
   return (
     <>
       <Header loggedIn={props.loggedIn} />
@@ -15,12 +24,14 @@ function Movies(props) {
         <SearchForm
           moviesList={props.moviesList} 
           handleSearch={props.handleSearch}
+          checkboxStatus={props.checkboxStatus}
+          handleShortMovies={props.handleShortMovies}
         />
         {props.isLoading ? (
           <Preloader />
         ) : (
           <MoviesCardList
-            moviesList={props.moviesList}
+            moviesList={setShortMovies()}
             savedMoviesList={props.savedMoviesList}
             isLoading={props.isLoading}
             handleSaveMovie={props.handleSaveMovie}

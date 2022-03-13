@@ -7,28 +7,26 @@ function SearchForm(props) {
   const location = useLocation().pathname;
   const keywordValue = localStorage.getItem('keyword');
   const [keyword, setKeyword] = React.useState(keywordValue && location === '/movies' ? keywordValue : '');
-  const [checked, setChecked] = React.useState(false);
 
   function handleKeyword(evt) {
     setKeyword(evt.target.value);
-  };
-
-  function handleCheck() {
-    setChecked(!checked);
+    if (location === '/movies') {
+      localStorage.setItem('keyword', evt.target.value);
+    };
   };
 
   function handleSubmit(evt) {
     evt.preventDefault();
     if (location === '/movies') {
-      props.handleSearch(props.moviesList, keyword, checked);
+      props.handleSearch(props.moviesList, keyword);
     } else {
-      props.handleSearch(props.savedMoviesList, keyword, checked);
+      props.handleSearch(props.savedMoviesList, keyword);
     }
   };
 
-  React.useEffect(() => {
-    props.handleSearch(checked);
-  }, [checked]);
+  function handleChange() {
+    return props.checkboxStatus === true ? true : false;
+  };
 
   return (
     <form className="search-form" onSubmit={handleSubmit}>
@@ -39,7 +37,7 @@ function SearchForm(props) {
       </div>
       <div className="search-form__checkbox-container">
         <label className="filter-checkbox-label">
-          <input type="checkbox" className="filter-checkbox-input" onChange={handleCheck}/>
+          <input type="checkbox" className="filter-checkbox-input" onClick={props.handleShortMovies} onChange={handleChange}/>
           <span className="filter-checkbox-switch" />
         </label>
         <p className="search-form__paragraph">Короткометражки</p>

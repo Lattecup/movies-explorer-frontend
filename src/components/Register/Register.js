@@ -43,7 +43,7 @@ function Register(props) {
       <FormTop title="Добро пожаловать!" />
       <form className="form" onSubmit={handleSubmit}>
         <Form type="text" name="name" id="name-input" placeholder="Имя" minLength="2" maxLength="30" value={name || ''} error={errorName} isValid={isValid} onChange={handleChangeName} />
-        <Form type="email" name="email" id="email-input" placeholder="E-mail" value={email} error={errorEmail} isValid={isValid} pattern="/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/i" onChange={handleChangeEmail} />
+        <Form type="email" name="email" id="email-input" placeholder="E-mail" value={email} error={errorEmail} isValid={isValid} pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" onChange={handleChangeEmail} />
         <Form type="password" name="password" id="password-input" placeholder="Пароль" minLength="6" value={password} error={errorPassword} isValid={isValid} onChange={handleChangePassword} />
         <FormButton title="Зарегистрироваться" type="form__submit-button_type_register" isValid={isValid} />
       </form>

@@ -9,7 +9,7 @@ function InfoTooltip(props) {
       <div className="popup__container">
         <img className="popup__image-status" src={props.onState ? successIcon : errorIcon} alt="Уведомление" />
         <h2 className="popup__message-status">
-          {props.onState ? 'Всё прошло успешно!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
+          {props.onState ? 'Успешно!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
         </h2>
         <button type="button" className="popup__close-button" aria-label="Закрыть" onClick={props.onClose} />
       </div>

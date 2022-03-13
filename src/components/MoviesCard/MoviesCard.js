@@ -8,9 +8,7 @@ function MoviesCard(props) {
   const image = props.movie.image.url ? `https://api.nomoreparties.co${props.movie.image.url}` : props.movie.image;
   const duration = `${Math.floor(props.movie.duration / 60)}ч ${props.movie.duration % 60}м`;
 
-  function isSaved() {
-    return props.savedMoviesList.some((i) => i.movieId === props.movie.id);
-  };
+  const isSaved = props.savedMoviesList.some((i) => i.movieId === props.movie.id);
 
   function handleSaveClick() {
     props.handleSaveMovie(props.movie);
@@ -28,7 +26,7 @@ function MoviesCard(props) {
           <p className="movie__duration">{duration}</p>
         </div>
         {location === '/movies' ? (
-          <button type="submit" className={`movie__save-button link ${isSaved() && `movie__save-button_active`}`} onClick={isSaved() ? handleDeleteClick : handleSaveClick} />
+          <button type="submit" className={`movie__save-button link ${isSaved && `movie__save-button_active`}`} onClick={isSaved ? handleDeleteClick : handleSaveClick} />
         ) : (
           <button type="submit" className="movie__delete-button link" onClick={handleDeleteClick} />
         )}

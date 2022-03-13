@@ -269,7 +269,9 @@ function App() {
                   handleSaveMovie={handleSaveMovie}
                   handleDeleteMovie={handleDeleteMovie}
                   isLoading={isLoading}
-                  checkboxStatus={checkboxStatus}
+                  checkboxStatus={JSON.parse(
+                    localStorage.getItem('checkboxStatus')
+                  )}
                   handleShortMovies={handleShortMovies}
                 />
               </ProtectedRoute>

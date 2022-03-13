@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router';
+import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
 function SearchForm(props) {
@@ -24,10 +25,6 @@ function SearchForm(props) {
     }
   };
 
-  function handleChange() {
-    return props.checkboxStatus === true ? true : false;
-  };
-
   return (
     <form className="search-form" onSubmit={handleSubmit}>
       <div className="search-form__input-container">
@@ -36,10 +33,10 @@ function SearchForm(props) {
         <button type="submit" className="search-form__submit-button link" onSubmit={handleSubmit}/>
       </div>
       <div className="search-form__checkbox-container">
-        <label className="filter-checkbox-label">
-          <input type="checkbox" className="filter-checkbox-input" onClick={props.handleShortMovies} onChange={handleChange}/>
-          <span className="filter-checkbox-switch" />
-        </label>
+        <FilterCheckbox
+          checkboxStatus={props.checkboxStatus}
+          handleShortMovies={props.handleShortMovies}
+        />
         <p className="search-form__paragraph">Короткометражки</p>
       </div>
     </form>

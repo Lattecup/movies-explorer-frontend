@@ -5,7 +5,7 @@ function FilterCheckbox(props) {
 
   return (
     <label className="filter-checkbox-label">
-      <input type="checkbox" className="filter-checkbox-input" checked={props.checkboxStatus === true ? true : false} onClick={props.handleShortMovies} />
+      <input type="checkbox" className="filter-checkbox-input" checked={props.checkboxStatus === true ? true : false} onClick={props.handleShortMovies} readOnly/>
       <span className="filter-checkbox-switch" />
     </label>
   );

@@ -1,6 +1,5 @@
 import React from 'react';
 import './Profile.css';
-import Header from '../Header/Header';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function Profile(props) {
@@ -42,7 +41,6 @@ function Profile(props) {
 
   return (
     <>
-      <Header loggedIn={props.loggedIn} />
       <section className="profile">
         <form className="profile__container" noValidate>
           <h2 className="profile__title">{`Привет, ${currentUser.name}!`}</h2>

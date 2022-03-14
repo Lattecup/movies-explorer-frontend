@@ -13,6 +13,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import * as mainApi from '../../utils/MainApi';
 import { moviesApi } from '../../utils/MoviesApi';
+import Header from '../Header/Header';
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
   const [shortSavedMovies, setShortSavedMovies] = React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
+  const isNeedHeader = location === '/' || location === '/movies' || location === '/saved-movies' || location === '/profile';
 
   const keyword = localStorage.getItem('keyword');
   const initialMovies = JSON.parse(localStorage.getItem('initialMovies'));
@@ -181,7 +183,7 @@ function App() {
     } else {
       setSavedMoviesList(savedMovies);
     }
-  }, [loggedIn]);
+  }, []);
 
   function handleSaveMovie(movie) {
     mainApi.saveMovie(movie)
@@ -259,8 +261,9 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
+        {isNeedHeader && <Header loggedIn={loggedIn} />}
         <Routes>
-          <Route path="/" element={<Main loggedIn={loggedIn} />} />
+          <Route path="/" element={<Main />} />
           <Route path="/signup" element={<Register onRegistration={handleRegistration} />} />
           <Route path="/signin" element={<Login onAuthorization={handleAuthorization} />} />
           <Route 
@@ -270,7 +273,6 @@ function App() {
                 <Movies
                   moviesList={moviesList}
                   savedMoviesList={savedMoviesList}
-                  loggedIn={loggedIn}
                   handleSearch={handleSearch}
                   handleSaveMovie={handleSaveMovie}
                   handleDeleteMovie={handleDeleteMovie}
@@ -288,7 +290,6 @@ function App() {
             element={
               <ProtectedRoute loggedIn={loggedIn}>
                 <SavedMovies
-                  loggedIn={loggedIn}
                   savedMoviesList={savedMoviesList}
                   handleSearch={handleSearch}
                   handleDeleteMovie={handleDeleteMovie}
@@ -304,7 +305,6 @@ function App() {
             element={
               <ProtectedRoute loggedIn={loggedIn}>
                 <Profile
-                  loggedIn={loggedIn}
                   onSignOut={handleSignOut}
                   onChangeProfile={handleChangeUserInfo}
                 />

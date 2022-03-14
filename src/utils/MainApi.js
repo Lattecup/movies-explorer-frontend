@@ -93,7 +93,7 @@ export const saveMovie = (movie) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      country: movie.country,
+      country: movie.country || 'undefined',
       director: movie.director,
       duration: movie.duration,
       year: movie.year,

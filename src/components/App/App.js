@@ -39,7 +39,6 @@ function App() {
   const initialSavedMovies = JSON.parse(localStorage.getItem('initialSavedMovies'));
   const checkboxStatus = JSON.parse(localStorage.getItem('checkboxStatus'));
 
-
   function closeAllPopups() {
     setIsInfoTooltipOpen(false);
   };
@@ -127,6 +126,7 @@ function App() {
     localStorage.removeItem('checkboxStatus');
     localStorage.removeItem('keyword');
     localStorage.removeItem('checkboxStatusSaved');
+    localStorage.removeItem('filteredMovies');
     setSavedMoviesList([]);
     setMoviesList([]);
     setCurrentUser([]);
@@ -227,6 +227,7 @@ function App() {
       const regExp = new RegExp(keyword, 'gi');
       const filteredMovies = allMovies.filter((movie) => regExp.test(movie.nameRU) || regExp.test(movie.nameEN));
       setMoviesList(filteredMovies);
+      localStorage.setItem('filteredMovies', JSON.stringify(filteredMovies));
     } else if (!keyword && location === '/movies') {
         setMoviesList(initialMovies);
     } else if (keyword && location === '/saved-movies') {
@@ -237,6 +238,10 @@ function App() {
         setSavedMoviesList(initialSavedMovies);
     }
   };
+
+  React.useEffect(() => {
+    localStorage.filteredMovies && setMoviesList(JSON.parse(localStorage.getItem('filteredMovies')));
+  }, []);
 
   function handleShortMovies() {
     if (location === '/movies' && shortMovies === false) {

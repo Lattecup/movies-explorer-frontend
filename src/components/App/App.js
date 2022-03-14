@@ -108,6 +108,7 @@ function App() {
             if (userInfo) {
               setCurrentUser(userInfo);
               setLoggedIn(true);
+              navigate(location);
             };
         })
         .catch((err) => {

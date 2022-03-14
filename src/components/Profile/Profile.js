@@ -35,6 +35,11 @@ function Profile(props) {
     });
   };
 
+  function handleSignOut(evt) {
+    evt.preventDefault();
+    props.onSignOut();
+  };
+
   return (
     <>
       <Header loggedIn={props.loggedIn} />
@@ -58,7 +63,7 @@ function Profile(props) {
         </form>
         <div className="profile__buttons">
           <button type="submit" className="profile__button profile__button_type_submit link" disabled={changed} onClick={handleSubmit}>Редактировать</button>
-          <button type="button" className="profile__button profile__button_type_logout link" aria-label="Выйти из аккаунта" onClick={props.onSignOut}>Выйти из аккаунта</button>
+          <button type="button" className="profile__button profile__button_type_logout link" aria-label="Выйти из аккаунта" onClick={handleSignOut}>Выйти из аккаунта</button>
         </div>
       </section>
     </>

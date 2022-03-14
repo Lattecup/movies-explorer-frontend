@@ -69,9 +69,11 @@ function App() {
 
   function handleRegistration(name, email, password) {
     mainApi.register(name, email, password)
-      .then(() => {
-        handleAuthorization(email, password);
-        setIsSuccess(true);
+      .then((res) => {
+        if (res) {
+          handleAuthorization(email, password);
+          setIsSuccess(true);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -85,10 +87,12 @@ function App() {
   function handleAuthorization(email, password) {
     mainApi.authorize(email, password)
       .then((res) => {
-        localStorage.setItem('token', res.token);
-        setLoggedIn(true);
-        getAlldata();
-        navigate('/movies');
+        if (res) {
+          localStorage.setItem('token', res.token);
+          setLoggedIn(true);
+          getAlldata();
+          navigate('/movies');
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -100,8 +104,10 @@ function App() {
     if (token) {
       mainApi.checkToken(token)
         .then((userInfo) => {
-          setCurrentUser(userInfo);
-          setLoggedIn(true);
+            if (userInfo) {
+              setCurrentUser(userInfo);
+              setLoggedIn(true);
+            };
         })
         .catch((err) => {
           console.log(err);
@@ -116,12 +122,12 @@ function App() {
     localStorage.removeItem('allMovies');
     localStorage.removeItem('savedMovies');
     localStorage.removeItem('initialSavedMovies');
-    localStorage.removeItem('keyword');
     localStorage.removeItem('checkboxStatus');
-    localStorage.clear();
+    localStorage.removeItem('keyword');
+    localStorage.removeItem('checkboxStatusSaved');
     setSavedMoviesList([]);
     setMoviesList([]);
-    setCurrentUser({});
+    setCurrentUser([]);
     setLoggedIn(false);
     navigate('/');
   };

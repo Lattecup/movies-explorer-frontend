@@ -32,13 +32,12 @@ export const authorize = (email, password) => {
 
 export const signOut = () => {
   return fetch('https://api.movies-explorer.nomoredomains.xyz/signout', {
-    credentials: 'include',
     method: 'POST',
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-type': 'application/json',
     },
-  }) 
-  .then(handleResponse);
+  }).then(handleResponse);
 };
 
 export const checkToken = (token) => {

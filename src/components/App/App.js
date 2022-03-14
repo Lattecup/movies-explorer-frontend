@@ -184,7 +184,7 @@ function App() {
     } else {
       setSavedMoviesList(savedMovies);
     }
-  }, []);
+  }, [loggedIn]);
 
   function handleSaveMovie(movie) {
     mainApi.saveMovie(movie)

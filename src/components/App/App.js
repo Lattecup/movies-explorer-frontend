@@ -242,7 +242,7 @@ function App() {
 
   React.useEffect(() => {
     localStorage.filteredMovies && setMoviesList(JSON.parse(localStorage.getItem('filteredMovies')));
-  }, []);
+  }, [loggedIn]);
 
   function handleShortMovies() {
     if (location === '/movies' && shortMovies === false) {

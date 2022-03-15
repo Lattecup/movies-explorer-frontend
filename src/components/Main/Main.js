@@ -1,6 +1,5 @@
 import React from 'react';
 import './Main.css';
-import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import AboutProject from '../AboutProject/AboutProject';
 import Techs from '../Techs/Techs';
@@ -12,7 +11,6 @@ function Main(props) {
 
   return (
     <>
-      <Header loggedIn={props.loggedIn}/>
       <Promo />
       <AboutProject />
       <Techs />

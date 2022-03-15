@@ -1,6 +1,6 @@
 .movie {
-  max-width: 364px;
-  max-height: 271px;
+  width: 364px;
+  height: 271px;
   background-color: #FFFFFF;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
 }
@@ -17,11 +17,15 @@
 }
 
 .movie__title {
+  max-width: 280px;
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 15px;
   line-height: 1.2;
   color: #000000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .movie__duration {
@@ -32,7 +36,8 @@
   color: #A0A0A0;
 }
 
-.movie__button {
+.movie__save-button {
+  background-image: url(../../images/movie-save-button.svg);
   cursor: pointer;
   background-repeat: no-repeat;
   background-position: center;
@@ -45,39 +50,53 @@
   right: 14px;
 }
 
-.movie__button_type_save {
-  background-image: url(../../images/movie-save-button.svg);
-}
-
-.movie__button_type_saved {
-  background-image: url(../../images/movie-saved-button.svg);
-}
-
-.movie__button_type_delete {
+.movie__delete-button {
   background-image: url(../../images/movie-delete-button.svg);
+  color: #FFFFFF;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 36px;
+  position: absolute;
+  top: 19px;
+  right: 14px;
+}
+
+.movie__save-button_active {
+  background-image: url(../../images/movie-save-button-active.svg);
+  background-color: #3456F3;
 }
 
 .movie__image {
   width: 100%;
-  max-height: 203px;
+  height: 203px;
 }
 
 @media screen and (max-width: 1279px) {
   .movie {
-    max-width: 339px;
-    max-height: 258px;
+    width: 339px;
+    height: 258px;
+  }
+  .movie-title {
+    max-width: 250px;
   }
   .movie__image {
-    max-height: 190px;
+    height: 190px;
   }
 }
 
 @media screen and (max-width: 767px) {
   .movie {
-    max-width: 300px;
-    max-height: 236px;
+    width: 300px;
+    height: 236px;
+  }
+  .movie-title {
+    max-width: 210px;
   }
   .movie__image {
-    max-height: 168px;
+    height: 168px;
   }
 }

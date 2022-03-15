@@ -25,6 +25,12 @@
   margin-top: 70px;
 }
 
+.form__success-message {
+  font-size: 14px;
+  line-height: 1.21;
+  color: #3456F3;
+}
+
 @media screen and (max-width: 767px) {
   .form__submit-button {
     font-size: 12px;

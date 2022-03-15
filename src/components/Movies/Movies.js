@@ -1,37 +1,42 @@
 import React from 'react';
 import './Movies.css';
-import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import MovieCard from '../MoviesCard/MoviesCard';
+import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
-  const [moreButtonActive, setMoreButtonActive] = React.useState(false);
 
-  React.useEffect(() => {
-    setMoreButtonActive(true);
-  }, []);
+  function setShortMovies() {
+    if (props.checkboxStatus === true) {
+      const filteredMovies = props.moviesList.filter((movie) => movie.duration <= 40);
+      return filteredMovies;
+    } else {
+      return props.moviesList;
+    }
+  };
 
   return (
     <>
-      <Header loggedIn={props.loggedIn} />
       <section className="movies">
-        <SearchForm />
-        <MoviesCardList moreButtonActive={moreButtonActive}>
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-          <MovieCard />
-        </MoviesCardList>
+        <SearchForm
+          moviesList={props.moviesList} 
+          handleSearch={props.handleSearch}
+          checkboxStatus={props.checkboxStatus}
+          handleShortMovies={props.handleShortMovies}
+        />
+        {props.isLoading ? (
+          <Preloader />
+        ) : (
+          <MoviesCardList
+            moviesList={setShortMovies()}
+            savedMoviesList={props.savedMoviesList}
+            isLoading={props.isLoading}
+            handleSaveMovie={props.handleSaveMovie}
+            handleDeleteMovie={props.handleDeleteMovie}
+            handleSearch={props.handleSearch}
+          />
+        )}
       </section>
       <Footer />
     </>
